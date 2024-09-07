@@ -17,7 +17,7 @@ jobs:
       - name: Deploy to Droplet
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
-            cd /path/to/your/project &&
+            cd /home/slombard/inception_droplet &&
             git pull &&
             docker build -t myapp . &&
             docker run -d -p 80:80 myapp
