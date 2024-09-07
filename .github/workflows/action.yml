@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check variables
+        run: |
+          echo "DROPLET_USER=${{ secrets.DROPLET_USER }}"
+          echo "DROPLET_IP=${{ secrets.DROPLET_IP }}"
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
