@@ -24,6 +24,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
             cd /home/slombard/inception_droplet &&
             git pull &&
-            docker build -t myapp . &&
-            docker run -d -p 80:80 myapp
+            make
           '
