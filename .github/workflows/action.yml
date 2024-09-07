@@ -10,22 +10,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Environment
-        run: |
-          bash setup.sh
+      # Check secrets (optional, can be removed)
       - name: Check variables
         run: |
           echo "DROPLET_USER=${{ secrets.DROPLET_USER }}"
           echo "DROPLET_IP=${{ secrets.DROPLET_IP }}"
+
+      # Set up SSH
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Deploy to Droplet
       - name: Deploy to Droplet
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
             cd /home/slombard/inception_droplet &&
             git pull &&
-            make
+            bash setup.sh && 
+            make                # Run the Makefile
           '
