@@ -34,13 +34,24 @@ else
     echo "Docker is already installed."
 fi
 
-# Check if Docker Compose is available (Docker CLI integrated)
+# Check if Docker Compose (integrated with Docker) is available
 if ! docker compose version &> /dev/null
 then
-    echo "Docker Compose could not be found, installing..."
-    sudo apt-get install -y docker-compose-plugin
+    echo "Docker Compose (part of Docker CLI) is not available, installing Docker."
+    sudo apt-get update
+    sudo apt-get install -y docker.io
 else
-    echo "Docker Compose is already installed."
+    echo "Docker Compose (part of Docker CLI) is available."
+fi
+
+# Check if Make is installed
+if ! command -v make &> /dev/null
+then
+    echo "Make could not be found, installing..."
+    sudo apt-get update
+    sudo apt-get install -y make
+else
+    echo "Make is already installed."
 fi
 
 echo "Environment setup complete."

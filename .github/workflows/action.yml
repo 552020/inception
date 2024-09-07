@@ -10,6 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Environment
+        run: |
+          bash setup.sh
       - name: Check variables
         run: |
           echo "DROPLET_USER=${{ secrets.DROPLET_USER }}"
