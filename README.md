@@ -28,6 +28,8 @@ Explain why you are creating private and public key on the remote and sharing th
 
 https://chatgpt.com/c/4b6528ac-466b-4788-86e1-ceedf8061488
 
+We need to manually clone the repository in the remote, for that since it could be a private repository GitHub needs to know the public key of the droplet. We need to copy the SSH publich key in GitHub and then clone the repo.
+
 ## Notes
 
 - Remember that acting as a root from SSH is not reccomende, and you should disable it. You should ass a new user, give to them sudo powers and disable root ssh login
@@ -44,3 +46,7 @@ sudo systemctl restart ssh
 
 
 ```
+
+### Writing and accessing secrets
+
+https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
