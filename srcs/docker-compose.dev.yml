@@ -11,3 +11,10 @@ services:
       - ./srcs/requirements/nginx/conf:/etc/nginx/conf.d
     networks:
       - inception
+
+volumes:
+  wordpress-data:
+
+networks:
+  inception:
+    driver: bridge
