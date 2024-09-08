@@ -47,6 +47,36 @@ sudo systemctl restart ssh
 
 ```
 
+## FAQ
+
+### Why We Don’t Run `update` and `upgrade` in Alpine like in Debian and Ubuntu
+
+In Alpine, the typical command sequence is:
+
+```bash
+apk update
+```
+
+This refreshes the package index, ensuring Alpine knows about the latest versions of available packages.
+
+In contrast, in **Debian/Ubuntu**, you run both:
+
+```bash
+apt update && apt upgrade
+```
+
+- `apt update`: Refreshes the package list.
+- `apt upgrade`: Upgrades all installed packages to the latest versions.
+
+**Why the Difference?**
+
+1. **Minimalism**: Alpine is designed to be minimal and lightweight, with packages that have fewer dependencies. It doesn’t have the heavy package management overhead of Debian-based systems.
+2. **Immutable Containers**: In Docker environments (like Alpine), containers are often rebuilt from scratch rather than being upgraded. This makes `apk upgrade` unnecessary in most cases.
+
+3. **Package Management Philosophy**: Alpine uses `apk` to handle installation and updates in one go. In most use cases, once you install a package using `apk add`, it is assumed you’re running the latest version, negating the need for a separate `upgrade` command.
+
+Thus, running `apk update` before installing packages is sufficient to ensure you have the latest versions, making `upgrade` redundant in container environments.
+
 ### Writing and accessing secrets
 
 https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions

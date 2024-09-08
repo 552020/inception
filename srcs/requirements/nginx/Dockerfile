@@ -1,5 +1,5 @@
-# Use Alpine as the base image
-FROM alpine:latest
+# Use penultimate version of Alpine as the base image
+FROM alpine:3.19
 
 # Install NGINX, OpenSSL, and any necessary packages, and create a new user to run NGINX
 RUN apk add --no-cache nginx openssl certbot certbot-nginx \

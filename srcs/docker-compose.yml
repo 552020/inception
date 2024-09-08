@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   nginx:
-    build: ./requirements/nginx
+    build: requirements/nginx
     container_name: nginx
     ports:
       - "80:80"
@@ -14,11 +14,10 @@ services:
       - wordpress
     networks:
       - inception
-    init: true
 
   wordpress:
     build:
-      context: ./requirements/wordpress
+      context: requirements/wordpress
     container_name: wordpress
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
@@ -55,7 +54,6 @@ services:
       - mariadb-data:/var/lib/mysql
     networks:
       - inception
-    init: true
 
 volumes:
   wordpress-data:
