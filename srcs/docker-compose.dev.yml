@@ -14,6 +14,19 @@ services:
     networks:
       - inception
 
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    env_file:
+      - ../.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./srcs/requirements/mariadb/conf:/etc/mysql
+    networks:
+      - inception
+
 volumes:
   wordpress-data:
 

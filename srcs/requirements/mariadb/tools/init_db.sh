@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start MySQL/MariaDB service
-mysqld_safe --skip-networking &
+mysqld_safe &
 
 # Wait for MySQL to start
 until mysqladmin ping --silent; do
