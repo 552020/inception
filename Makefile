@@ -7,7 +7,7 @@ hello:
 # Build and run NGINX container in development mode
 dev:
 	@echo "Running NGINX in development mode..."
-	docker-compose -f docker-compose.dev.yml up --build -d nginx
+	docker-compose -f ./srcs/docker-compose.dev.yml up --build -d nginx
 
 # Build and run the entire application in production mode
 # deploy:
