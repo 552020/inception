@@ -7,6 +7,12 @@ hello:
 # Build and run NGINX container in development mode
 dev:
 	@echo "Running NGINX in development mode..."
+	@if ! pgrep -x "dockerd" > /dev/null; then \
+		echo "Starting Docker..."; \
+		sudo systemctl start docker; \
+	else \
+		echo "Docker is already running."; \
+	fi
 	docker compose -f ./srcs/docker-compose.dev.yml up --build -d nginx
 
 # Build and run the entire application in production mode

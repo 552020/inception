@@ -9,6 +9,8 @@ services:
     volumes:
       - wordpress-data:/var/www/html
       - ./srcs/requirements/nginx/conf:/etc/nginx/conf.d
+      - ./certbot-etc:/etc/letsencrypt # Mount for SSL certificates
+
     networks:
       - inception
 

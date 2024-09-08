@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Install NGINX, OpenSSL, and any necessary packages, and create a new user to run NGINX
-RUN apk add --no-cache nginx openssl \
+RUN apk add --no-cache nginx openssl certbot certbot-nginx \
 	&& adduser -D -H -s /bin/false -u 1000 -G www-data www-data
 
 # Create SSL directory and generate a self-signed certificate
