@@ -29,5 +29,5 @@ jobs:
             cd /home/slombard/inception_droplet &&
             git pull &&
             bash setup.sh && 
-            make                # Run the Makefile
+            make dev
           '

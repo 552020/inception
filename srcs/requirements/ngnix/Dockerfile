@@ -18,6 +18,9 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 # Create the necessary directories
 RUN mkdir -p /run/nginx /var/www/wordpress
 
+# Add an HTML file to serve as a test page
+RUN echo "<h1>Hello from NGINX in Docker</h1>" > /var/www/wordpress/index.html
+
 # Expose port 443 for HTTPS
 EXPOSE 443
 

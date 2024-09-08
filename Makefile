@@ -1,8 +1,15 @@
-.PHONY: hello deploy
+.PHONY: hello nginx deploy dev
 
+# Simple hello target for testing
 hello:
-	echo "Hello from the Makefile"
+	@echo "Hello from the Makefile"
 
-deploy:
-	echo "Deploying the application"
-	# Add the rest of your deployment steps here, like building Docker images, etc.
+# Build and run NGINX container in development mode
+dev:
+	@echo "Running NGINX in development mode..."
+	docker-compose -f docker-compose.dev.yml up --build -d nginx
+
+# Build and run the entire application in production mode
+# deploy:
+# 	@echo "Deploying the entire application..."
+# 	docker-compose up --build -d
