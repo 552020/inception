@@ -1,29 +1,28 @@
 .PHONY: nginx local droplet check_files
 
 
-# Set environment variables from secrets
-MYSQL_ROOT_PASSWORD := ./secrets/mysql_root_password.txt
-MYSQL_USER_PASSWORD := ./secrets/mysql_user_password.txt
 
-
-# Check if password files exist and are not empty (for development)
-check_files:
-	@if [ ! -f $(MYSQL_ROOT_PASSWORD) ] || [ ! -s $(MYSQL_ROOT_PASSWORD) ]; then \
-		echo "MySQL root password file not found or empty. Exiting..."; \
+# Check if Docker secrets exist (for both development and production)
+check_secrets:
+	@echo "Checking if Docker secrets are set..."
+	@if ! docker secret ls | grep -q 'mysql_root_password'; then \
+		echo "Error: Docker secret mysql_root_password not found."; \
 		exit 1; \
 	fi
-	@if [ ! -f $(MYSQL_USER_PASSWORD) ] || [ ! -s $(MYSQL_USER_PASSWORD) ]; then \
-		echo "MySQL user password file not found or empty. Exiting..."; \
+	@if ! docker secret ls | grep -q 'mysql_user_password'; then \
+		echo "Error: Docker secret mysql_user_password not found."; \
 		exit 1; \
 	fi
-	@echo "Using local files for development."
+	@echo "Docker secrets are set."
+
+
 
 # Build and run the docker compose dev file 
-local: check_files
+local: check_secrets
 	@echo "Running in development mode..."
 	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
 
 
-droplet:
+droplet: check_secrets
 	@echo "Deploying the entire application to the droplet..."
 	docker compose -f ./srcs/docker-compose.dev.yml up --build -d

@@ -29,8 +29,8 @@ fi
 # Check for MySQL password files and create Docker secrets
 if [ -f ./secrets/mysql_root_password.txt ] && [ -f ./secrets/mysql_user_password.txt ]; then
     echo "Creating Docker secrets from local password files..."
-    docker secret rm mysql_root_password || true
-    docker secret rm mysql_user_password || true
+    docker secret rm mysql_root_password 2>/dev/null || true
+    docker secret rm mysql_user_password 2>/dev/null || true
     cat ./secrets/mysql_root_password.txt | docker secret create mysql_root_password -
     cat ./secrets/mysql_user_password.txt | docker secret create mysql_user_password -
 else
