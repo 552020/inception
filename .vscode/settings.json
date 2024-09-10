@@ -1,7 +1,19 @@
 {
-	"workbench.colorCustomizations": {
-		"activityBar.background": "#4F0367",
-		"titleBar.activeBackground": "#6E0490",
-		"titleBar.activeForeground": "#FEFBFF"
-	}
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#4F0367",
+    "titleBar.activeBackground": "#6E0490",
+    "titleBar.activeForeground": "#FEFBFF"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.insertSpaces": true, // Use spaces instead of tabs
+    "editor.tabSize": 2, // Use 2 spaces for YAML files
+    "editor.detectIndentation": false
+  },
+  "editor.formatOnSave": true,
+  // Global settings (for other files)
+  "editor.insertSpaces": false,     // Keep using tabs globally (for other files)
+  "editor.detectIndentation": true  // Detect indentation based on file content
+}
+
 }

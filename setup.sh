@@ -39,10 +39,19 @@ if ! docker compose version &> /dev/null
 then
     echo "Docker Compose (part of Docker CLI) is not available, installing Docker."
     sudo apt-get update
-    sudo apt-get install -y docker.io
+    sudo apt-get install -y docker-compose-plugin
 else
     echo "Docker Compose (part of Docker CLI) is available."
 fi
+
+# Initialize Docker Swarm, specifying the advertise address
+if ! docker info | grep -q "Swarm: active"; then
+    echo "Initializing Docker Swarm..."
+    docker swarm init --advertise-addr 161.35.17.117
+else
+    echo "Docker Swarm is already initialized."
+fi
+
 
 # Check if Make is installed
 if ! command -v make &> /dev/null

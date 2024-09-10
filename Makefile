@@ -1,22 +1,29 @@
-.PHONY: hello nginx deploy dev
-
-# Simple hello target for testing
-hello:
-	@echo "Hello from the Makefile"
+.PHONY: nginx local droplet check_files
 
 
+# Set environment variables from secrets
+MYSQL_ROOT_PASSWORD := ./secrets/mysql_root_password.txt
+MYSQL_USER_PASSWORD := ./secrets/mysql_user_password.txt
 
-# Build and run NGINX container in development mode
-# Build and run NGINX container in development mode
-dev:
-	@echo "Setting up environment variables from secrets..."
-	DB_PASSWORD=$$(cat ./secrets/db_password.txt) \
-	WP_ADMIN_PASSWORD=$$(cat ./secrets/wp_admin_password.txt) \
-	WP_USER_PASSWORD=$$(cat ./secrets/wp_user_password.txt) \
+
+# Check if password files exist and are not empty (for development)
+check_files:
+	@if [ ! -f $(MYSQL_ROOT_PASSWORD) ] || [ ! -s $(MYSQL_ROOT_PASSWORD) ]; then \
+		echo "MySQL root password file not found or empty. Exiting..."; \
+		exit 1; \
+	fi
+	@if [ ! -f $(MYSQL_USER_PASSWORD) ] || [ ! -s $(MYSQL_USER_PASSWORD) ]; then \
+		echo "MySQL user password file not found or empty. Exiting..."; \
+		exit 1; \
+	fi
+	@echo "Using local files for development."
+
+# Build and run the docker compose dev file 
+local: check_files
+	@echo "Running in development mode..."
 	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
 
 
-# Build and run the entire application in production mode
-# deploy:
-# 	@echo "Deploying the entire application..."
-# 	docker-compose up --build -d
+droplet:
+	@echo "Deploying the entire application to the droplet..."
+	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
