@@ -21,7 +21,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
             cd /home/slombard/inception_droplet &&
-            bash setup.sh &&
+            bash setup_droplet.sh &&
             
             # Remove mysql_root_password secret if it exists
             if docker secret ls | grep -q mysql_root_password; then
