@@ -9,7 +9,7 @@ else
 fi
 
 # Check if wp-config.php already exists and environment variables are set
-if [ -z "$SQL_DATABASE" ] || [ -z "$SQL_USER" ] || [ -z "$SQL_PSWD" ] || [ -z "$DB_HOST"]; then
+if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$DB_HOST"]; then
     echo "Database credentials not set!"
     exit 1
 fi
@@ -29,9 +29,9 @@ done
 # Generate wp-config.php if it doesn't exist
 if [ ! -e /var/www/wordpress/wp-config.php ]; then
     wp config create --allow-root \
-                     --dbname=$SQL_DATABASE \
-                     --dbuser=$SQL_USER \
-                     --dbpass=$SQL_PSWD \
+                     --dbname=$MYSQL_DATABASE \
+                     --dbuser=$MYSQL_USER \
+                     --dbpass=$MYSQL_USER_PASSWORD \
                      --dbhost=$DB_HOST \
 fi
 

@@ -27,9 +27,37 @@ services:
     networks:
       - inception
 
+  wordpress:
+    build:
+      context: ./requirements/wordpress
+    container_name: wordpress
+    env_file:
+      - ../.env
+    volumes:
+      - wordpress-data:/var/www/wordpress
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    secrets:
+      - mysql_root_password
+      - mysql_user_password
+    healthcheck:
+      test: ["CMD", "wp", "core", "is-installed", "--allow-root"]
+      interval: 10s
+      retries: 5
+    ports:
+      - "9000:9000"
+
 volumes:
   wordpress-data:
 
 networks:
   inception:
     driver: bridge
+
+secrets:
+  mysql_root_password:
+    external: true
+  mysql_user_password:
+    external: true
