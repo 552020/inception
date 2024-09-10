@@ -33,7 +33,7 @@ RUN chown -R www-data:www-data /var/www/wordpress \
     && chmod -R 755 /var/www/wordpress
 
 # Copy the WordPress setup script into the container
-COPY ./wordpress_setup.sh /usr/local/bin/wordpress_setup.sh
+COPY ./tools/wordpress_setup.sh /usr/local/bin/wordpress_setup.sh
 RUN chmod +x /usr/local/bin/wordpress_setup.sh
 
 # Expose port 9000 for PHP-FPM
