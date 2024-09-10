@@ -4,16 +4,17 @@
 hello:
 	@echo "Hello from the Makefile"
 
+
+
+# Build and run NGINX container in development mode
 # Build and run NGINX container in development mode
 dev:
-	@echo "Running NGINX in development mode..."
-	@if ! pgrep -x "dockerd" > /dev/null; then \
-		echo "Starting Docker..."; \
-		sudo systemctl start docker; \
-	else \
-		echo "Docker is already running."; \
-	fi
-	docker compose -f ./srcs/docker-compose.dev.yml up --build -d nginx
+	@echo "Setting up environment variables from secrets..."
+	DB_PASSWORD=$$(cat ./secrets/db_password.txt) \
+	WP_ADMIN_PASSWORD=$$(cat ./secrets/wp_admin_password.txt) \
+	WP_USER_PASSWORD=$$(cat ./secrets/wp_user_password.txt) \
+	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
+
 
 # Build and run the entire application in production mode
 # deploy:
