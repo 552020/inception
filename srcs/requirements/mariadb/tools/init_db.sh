@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Retrieve the passwords from Docker secrets
+MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
+MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+
+# Check if necessary environment variables are set
+if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$MYSQL_ROOT_PASSWORD" ]; then
+    echo "Required environment variables or secrets are missing!"
+    exit 1
+fi
+
 # Start MySQL/MariaDB service
 mysqld_safe &
 
@@ -10,22 +20,22 @@ until mysqladmin ping --silent; do
 done
 
 # Create database if it doesn't exist
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${SQL_DATABASE}\`;"
+mysql -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
 
 # Create user if it doesn't exist
-mysql -e "CREATE USER IF NOT EXISTS \`${SQL_USER}\`@'%' IDENTIFIED BY '${SQL_PASSWORD}';"
+mysql -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';"
 
 # Grant all privileges to the user for the database
-mysql -e "GRANT ALL PRIVILEGES ON \`${SQL_DATABASE}\`.* TO \`${SQL_USER}\`@'%';"
+mysql -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%';"
 
 # Change the root password for localhost
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';"
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
 
 # Flush privileges to apply changes
 mysql -e "FLUSH PRIVILEGES;"
 
 # Shutdown the MariaDB server safely
-mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
+mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown
 
 # Restart MariaDB in safe mode
 exec mysqld_safe

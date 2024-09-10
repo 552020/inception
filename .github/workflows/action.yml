@@ -31,5 +31,5 @@ jobs:
             echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" | docker secret create mysql_root_password - &&
             echo "${{ secrets.MYSQL_USER_PASSWORD }}" | docker secret create mysql_user_password - &&
             git pull &&
-            make dev
+            make droplet
           '
