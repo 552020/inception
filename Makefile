@@ -12,11 +12,12 @@ check_files:
 		exit 1; \
 	fi
 	@echo "Secret files are set."
-# Build and run the docker compose dev file 
-local: check_files
-	@echo "Running in development mode..."
-	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
 
-droplet: check_files
-	@echo "Deploying the entire application to the droplet..."
+# General up rule
+up: check_files
+	@echo "Starting the application..."
 	docker compose -f ./srcs/docker-compose.dev.yml up --build -d
+# General down rule
+down:
+	@echo "Stopping and removing containers..."
+	docker compose -f ./srcs/docker-compose.dev.yml down

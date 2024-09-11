@@ -21,25 +21,27 @@ if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWOR
     exit 1
 fi
 
-timeout=60
+timeout=180
 waited=0
 while ! mysqladmin ping --host=$DB_HOST --silent; do
-    echo "Waiting for MariaDB connection..."
+    echo "Waiting for MariaDB connection... waited ${waited} seconds."
     sleep 5
     waited=$((waited+5))
     if [ "$waited" -ge "$timeout" ]; then
-        echo "MariaDB connection timed out!"
+        echo "MariaDB connection timed out after ${waited} seconds!"
         exit 1
     fi
 done
 
 # Generate wp-config.php if it doesn't exist
 if [ ! -e /var/www/wordpress/wp-config.php ]; then
+    echo "Creating wp-config.php..."
     wp config create --allow-root \
                      --dbname=$MYSQL_DATABASE \
                      --dbuser=$MYSQL_USER \
                      --dbpass=$MYSQL_USER_PASSWORD \
                      --dbhost=$DB_HOST \
+                     || { echo "wp-config.php creation failed!"; exit 1; }
 fi
 
 # Perform WordPress core installation
@@ -66,11 +68,6 @@ if ! wp user get $WP_USER --allow-root > /dev/null 2>&1; then
 else
     echo "User $WP_USER already exists."
 fi
-
-
-wp user create --allow-root $WP_USER $WP_USER_EMAIL \
-               --role=editor \
-               --user_pass=$WP_USER_PASSWORD
 
 # Ensure PHP-FPM directory exists
 if [ ! -d /run/php ]; then

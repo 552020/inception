@@ -17,8 +17,7 @@ services:
 
   mariadb:
     image: mariadb
-    build:
-      context: ./requirements/mariadb
+    build: requirements/mariadb/
     env_file:
       - ../.env
     ports:
@@ -31,11 +30,17 @@ services:
       - mysql_user_password
     networks:
       - inception
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
+    restart: unless-stopped
 
   wordpress:
     image: wordpress
-    build:
-      context: ./requirements/wordpress
+    build: requirements/wordpress/
     container_name: wordpress
     env_file:
       - ../.env
@@ -52,6 +57,13 @@ services:
       - "9000:9000"
     networks:
       - inception
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000"]
+      interval: 30s
+      retries: 3
+      timeout: 10s
+      start_period: 10s
+    restart: unless-stopped
 
 volumes:
   wordpress-data:

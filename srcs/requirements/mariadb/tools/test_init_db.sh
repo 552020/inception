@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Ensure the secrets directory exists
+mkdir -p /run/secrets
+
+# Set the secrets in files (for testing purposes; in production, Docker handles secrets)
+echo "root_password" > /run/secrets/mysql_root_password
+echo "user_password" > /run/secrets/mysql_user_password
+
+# Export environment variables
+export MYSQL_DATABASE="wordpress"
+export MYSQL_USER="user"
+
+# Print environment variables to check
+echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+echo "MYSQL_USER: $MYSQL_USER"
+
 # Retrieve the passwords from Docker secrets
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
 MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
