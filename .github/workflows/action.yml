@@ -23,6 +23,17 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
             cd /home/slombard/inception_droplet &&
 
+            # Ensure the secrets directory exists
+            mkdir -p ./secrets &&
+
+            # Debug: Check if the secrets directory was created
+            if [ ! -d "./secrets" ]; then
+              echo "Error: secrets directory was not created!";
+              exit 1;
+            else
+              echo "Secrets directory exists.";
+            fi &&
+
             # Create or update the secret files from GitHub secrets
             echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" > ./secrets/mysql_root_password.txt &&
             echo "${{ secrets.MYSQL_USER_PASSWORD }}" > ./secrets/mysql_user_password.txt &&
