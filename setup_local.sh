@@ -18,24 +18,12 @@ else
     echo "Docker Compose is available."
 fi
 
-# Initialize Docker Swarm (local environment)
-if ! docker info | grep -q "Swarm: active"; then
-    echo "Initializing Docker Swarm..."
-    docker swarm init
-else
-    echo "Docker Swarm is already initialized."
-fi
-
-# Check for MySQL password files and create Docker secrets
-if [ -f ./secrets/mysql_root_password.txt ] && [ -f ./secrets/mysql_user_password.txt ]; then
-    echo "Creating Docker secrets from local password files..."
-    docker secret rm mysql_root_password 2>/dev/null || true
-    docker secret rm mysql_user_password 2>/dev/null || true
-    cat ./secrets/mysql_root_password.txt | docker secret create mysql_root_password -
-    cat ./secrets/mysql_user_password.txt | docker secret create mysql_user_password -
-else
+# Check if the password files exist in the local secrets folder
+if [ ! -f ./secrets/mysql_root_password.txt ] || [ ! -f ./secrets/mysql_user_password.txt ]; then
     echo "Password files not found in ./secrets/. Exiting."
     exit 1
+else
+    echo "Password files found in ./secrets/. Continuing setup..."
 fi
 
 echo "Local environment setup complete."

@@ -15,14 +15,28 @@ RUN curl -o wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
+# Create the www-data user and group only if they don't already exist
+RUN if ! getent group www-data > /dev/null; then addgroup -S www-data; fi \
+    && if ! id -u www-data > /dev/null 2>&1; then adduser -S -G www-data www-data; fi
+
 # Copy custom PHP-FPM configuration
 COPY ./conf/www.conf /etc/php81/php-fpm.d/www.conf
 
 # Check if WordPress is already installed, if not, download and extract WordPress
-RUN if [ ! -d /var/www/wordpress/wp-admin ]; then \
+RUN mkdir -p /var/www/wordpress && \
+    if [ ! -d /var/www/wordpress/wp-admin ]; then \
     curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz \
-    && tar -xzf wordpress.tar.gz && rm wordpress.tar.gz \
-    && mv wordpress /var/www/wordpress; \
+    && tar -xzf wordpress.tar.gz \
+    && ls -la \
+    && echo "Current working directory is: $(pwd)" \
+    && if [ -d wordpress ]; then \
+        mv wordpress /var/www/wordpress; \
+        echo "WordPress directory moved successfully."; \
+    else \
+        echo "WordPress directory not found after extraction!"; \
+        exit 1; \
+    fi \
+    && rm wordpress.tar.gz; \
     fi
 
 # Set up volumes for WordPress files and database connection

@@ -17,29 +17,20 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # Deploy to Droplet
+      # Deploy to Droplet
       - name: Deploy to Droplet
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_IP }} '
             cd /home/slombard/inception_droplet &&
-            bash setup_droplet.sh &&
-            
-            # Remove mysql_root_password secret if it exists
-            if docker secret ls | grep -q mysql_root_password; then
-              docker secret rm mysql_root_password;
-            fi &&
-            
-            # Remove mysql_user_password secret if it exists
-            if docker secret ls | grep -q mysql_user_password; then
-              docker secret rm mysql_user_password;
-            fi &&
 
-            # Create mysql_root_password secret
-            echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" | docker secret create mysql_root_password - &&
+            # Create or update the secret files from GitHub secrets
+            echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" > ./secrets/mysql_root_password.txt &&
+            echo "${{ secrets.MYSQL_USER_PASSWORD }}" > ./secrets/mysql_user_password.txt &&
 
-            # Create mysql_user_password secret
-            echo "${{ secrets.MYSQL_USER_PASSWORD }}" | docker secret create mysql_user_password - &&
+            # Pull the latest code and run the Makefile
+            git pull && make droplet &&
 
-            # Pull the latest code and run make
-            git pull &&
-            make droplet
+            # Optionally clean up the secret files after they have been used
+            rm ./secrets/mysql_root_password.txt &&
+            rm ./secrets/mysql_user_password.txtke droplet
           '

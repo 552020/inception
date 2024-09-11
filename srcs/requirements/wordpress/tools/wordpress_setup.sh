@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Retrieve the passwords from Docker secrets
+MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
+MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+
+
 # Check if the WordPress directory exists
 if [ -d /var/www/wordpress ]; then
     cd /var/www/wordpress
