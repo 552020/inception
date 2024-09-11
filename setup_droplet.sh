@@ -44,7 +44,6 @@ else
     echo "Docker Compose (part of Docker CLI) is available."
 fi
 
-
 # Check if Make is installed
 if ! command -v make &> /dev/null
 then
@@ -55,4 +54,13 @@ else
     echo "Make is already installed."
 fi
 
-echo "Environment setup complete."
+# Check if slombard.42.fr is already mapped to localhost in /etc/hosts
+if ! grep -q "slombard.42.fr" /etc/hosts; then
+    echo "Adding slombard.42.fr to /etc/hosts..."
+    sudo sh -c 'echo "127.0.0.1 slombard.42.fr" >> /etc/hosts'
+    echo "slombard.42.fr has been added to /etc/hosts."
+else
+    echo "slombard.42.fr is already in /etc/hosts."
+fi
+
+echo "Droplet environment setup complete."
