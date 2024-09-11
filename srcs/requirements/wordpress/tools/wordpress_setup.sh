@@ -3,6 +3,8 @@
 # Retrieve the passwords from Docker secrets
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
 MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
+WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
+WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 
 
 # Check if the WordPress directory exists
@@ -49,18 +51,18 @@ fi
 wp core install --url="$DOMAIN_NAME" \
 				--title="$SITE_TITLE" \
 				--admin_user="$WP_ADMIN" \
-				--admin_password="$WP_ADMIN_PSWD" \
+				--admin_password="$WP_ADMIN_PASSWORD" \
 				--admin_email="$WP_ADMIN_EMAIL" \
 				--allow-root
 
 # Create a new WordPress user
-if [ -z "$WP_USER" ] || [ -z "$WP_USER_EMAIL" ] || [ -z "$WP_USER_PSWD" ]; then
+if [ -z "$WP_USER" ] || [ -z "$WP_USER_EMAIL" ] || [ -z "$WP_USER_PASSWORD" ]; then
     echo "User details not set!"
     exit 1
 fi
 
 if ! wp user get $WP_USER --allow-root > /dev/null 2>&1; then
-    wp user create --allow-root $WP_USER $WP_USER_EMAIL --role=editor --user_pass=$WP_USER_PSWD
+    wp user create --allow-root $WP_USER $WP_USER_EMAIL --role=editor --user_pass=$WP_USER_PASSWORD
 else
     echo "User $WP_USER already exists."
 fi
@@ -68,7 +70,7 @@ fi
 
 wp user create --allow-root $WP_USER $WP_USER_EMAIL \
                --role=editor \
-               --user_pass=$WP_USER_PSWD
+               --user_pass=$WP_USER_PASSWORD
 
 # Ensure PHP-FPM directory exists
 if [ ! -d /run/php ]; then

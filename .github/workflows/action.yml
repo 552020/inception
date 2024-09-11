@@ -26,11 +26,15 @@ jobs:
             # Create or update the secret files from GitHub secrets
             echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" > ./secrets/mysql_root_password.txt &&
             echo "${{ secrets.MYSQL_USER_PASSWORD }}" > ./secrets/mysql_user_password.txt &&
+            echo "${{ secrets.WP_ADMIN_PASSWORD }}" > ./secrets/wp_admin_password.txt &&
+            echo "${{ secrets.WP_USER_PASSWORD }}" > ./secrets/wp_user_password.txt &&
 
             # Pull the latest code and run the Makefile
             git pull && make droplet &&
 
             # Optionally clean up the secret files after they have been used
             rm ./secrets/mysql_root_password.txt &&
-            rm ./secrets/mysql_user_password.txtke droplet
+            rm ./secrets/mysql_user_password.txtke droplet &&
+            rm ./secrets/wp_admin_password.txt &&
+            rm ./secrets/wp_user_password.txt
           '
