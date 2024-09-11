@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   nginx:
+    image: nginx
     build: requirements/nginx/
     container_name: nginx
     ports:
@@ -15,6 +16,7 @@ services:
       - inception
 
   mariadb:
+    image: mariadb
     build:
       context: ./requirements/mariadb
     env_file:
@@ -31,6 +33,7 @@ services:
       - inception
 
   wordpress:
+    image: wordpress
     build:
       context: ./requirements/wordpress
     container_name: wordpress
