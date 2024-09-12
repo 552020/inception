@@ -16,22 +16,11 @@ else
 fi
 
 # Check if wp-config.php already exists and environment variables are set
-if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$DB_HOST"]; then
+if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$DB_HOST" ]; then
+
     echo "Database credentials not set!"
     exit 1
 fi
-
-timeout=180
-waited=0
-while ! mysqladmin ping --host=$DB_HOST --silent; do
-    echo "Waiting for MariaDB connection... waited ${waited} seconds."
-    sleep 5
-    waited=$((waited+5))
-    if [ "$waited" -ge "$timeout" ]; then
-        echo "MariaDB connection timed out after ${waited} seconds!"
-        exit 1
-    fi
-done
 
 # Generate wp-config.php if it doesn't exist
 if [ ! -e /var/www/wordpress/wp-config.php ]; then

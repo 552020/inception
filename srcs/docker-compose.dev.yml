@@ -31,8 +31,6 @@ services:
       - mysql_user_password
     networks:
       - inception
-    depends_on:
-      - wordpress
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       interval: 30s
@@ -49,8 +47,6 @@ services:
       - ../.env
     volumes:
       - wordpress-data:/var/www/wordpress
-    depends_on:
-      - mariadb
     secrets:
       - mysql_root_password
       - mysql_user_password
