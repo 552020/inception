@@ -1,20 +1,24 @@
-# Inception as a real world project
+# Inception as a Real-World Project
 
-This repo is about making inception a real world project.
+This repository is about making "Inception" a practical, real-world project.
 
-## Digital Ocean VM
+## Digital Ocean VM and Local Development
 
-We picked up a Digital Ocean droplet to have a VM in the cloud, but you could use any other service.
+We are developing the project for two different environments: a cloud-based VM on Digital Ocean (Ubuntu) and a local development machine (macOS).
 
-Is it possible to do it also locally? The problem is that you normally don't have a public IP address on your local machine.
+**Cloud Environment:**  
+For the cloud-based VM, passwords are managed through GitHub secrets. During deployment, the GitHub Actions workflow creates temporary secret files on the VM in a `/secrets/` dir and removes them once the containers are up and running.
 
-It's not necessary but recommanded to have SSH access to your droplet, so that you can control it from your local machine. The alternative would be to work on the console of the web interface of the provider (digial Ocean)
+**Local Development Environment:**  
+In the local environment, passwords are stored as text files in a `/secrets/` directory. The SSL certificates include self-signed certificates for the `login.42.fr` WordPress site and a real certificate for the 'bonus' website. There is also a minimal extra website for localhost with a self-signed certificate.
 
-## Install docker in the VM
+**Note:** The script that checks for the necessary applications for Docker and Docker Compose is OS-dependent. Ensure you use the correct script for each environment.
 
-Install docker
+## Install Docker on the VM
 
-```
+To install Docker, use the following commands:
+
+```bash
 apt-get update
 apt-get install -y docker.io
 systemctl start docker
@@ -24,59 +28,86 @@ systemctl status docker
 
 ## Setup GitHub Actions
 
-Explain why you are creating private and public key on the remote and sharing the private key with the GitHub Actions server. Normally you never share the private key.
+In order to deploy code from GitHub Actions to a remote droplet, we need to enable secure SSH access between GitHub and the droplet. This process involves creating a public-private key pair for authentication.
 
-https://chatgpt.com/c/4b6528ac-466b-4788-86e1-ceedf8061488
+Here’s how it works:
 
-We need to manually clone the repository in the remote, for that since it could be a private repository GitHub needs to know the public key of the droplet. We need to copy the SSH publich key in GitHub and then clone the repo.
+1. **Creating SSH Keys on the Droplet:**
+
+   - On the remote droplet, we generate an SSH key pair (public and private keys). The public key is added to the `authorized_keys` file on the droplet, allowing the droplet to recognize and accept connections from the corresponding private key.
+
+2. **Configuring GitHub Actions:**
+
+   - Since GitHub Actions operates in an ephemeral environment (a fresh environment created and destroyed with each workflow run), we cannot reliably configure and store keys on it in the same way we would on a long-lived VM.
+   - Instead, we share the private key of the SSH key pair with GitHub Actions. This allows GitHub Actions to authenticate and securely access the droplet for deployment tasks.
+
+3. **Why This Method?**
+   - **Ephemeral Environments:** GitHub Actions workflows run in temporary environments that are created and destroyed for each run. Configuring SSH keys directly on these environments would be cumbersome and less reliable.
+   - **Practicality:** Using this 'reversed' method—sharing the private key with GitHub Actions while adding the public key to the droplet—is a practical workaround. It simplifies the setup by avoiding the need to repeatedly configure SSH keys on an ephemeral environment and the remote droplet.
+
+This approach ensures secure communication between GitHub Actions and your remote droplet without the complexities of managing SSH keys in an ephemeral environment.
 
 ## Notes
 
-- Remember that acting as a root from SSH is not reccomende, and you should disable it. You should ass a new user, give to them sudo powers and disable root ssh login
+- **Avoid Using Root for SSH on the droplet**: It is not recommended to use root for SSH access. Instead, create a new user, grant them sudo privileges, and disable root SSH login:
 
-```
-adduser newuser
-suermod -aG sudo newuser
-```
+  ```bash
+  adduser newuser
+  usermod -aG sudo newuser
+  ```
 
-```
-vim vim /etc/ssh/sshd_config
-PermitRootLogin no
-sudo systemctl restart ssh
+  Edit the SSH configuration to disable root login:
 
-
-```
+  ```bash
+  vim /etc/ssh/sshd_config
+  PermitRootLogin no
+  sudo systemctl restart ssh
+  ```
 
 ## FAQ
 
-### Why We Don’t Run `update` and `upgrade` in Alpine like in Debian and Ubuntu
+### Why Don’t We Run `update` and `upgrade` in Alpine Like in Debian and Ubuntu?
 
-In Alpine, the typical command sequence is:
+In Alpine Linux, the typical command sequence is:
 
 ```bash
 apk update
 ```
 
-This refreshes the package index, ensuring Alpine knows about the latest versions of available packages.
-
-In contrast, in **Debian/Ubuntu**, you run both:
+This updates the package index and ensures you get the latest available packages. In contrast, **Debian/Ubuntu** uses:
 
 ```bash
 apt update && apt upgrade
 ```
 
 - `apt update`: Refreshes the package list.
-- `apt upgrade`: Upgrades all installed packages to the latest versions.
+- `apt upgrade`: Upgrades installed packages to their latest versions.
 
 **Why the Difference?**
 
-1. **Minimalism**: Alpine is designed to be minimal and lightweight, with packages that have fewer dependencies. It doesn’t have the heavy package management overhead of Debian-based systems.
-2. **Immutable Containers**: In Docker environments (like Alpine), containers are often rebuilt from scratch rather than being upgraded. This makes `apk upgrade` unnecessary in most cases.
+1. **Minimalism**: Alpine is designed to be minimal and lightweight, with fewer dependencies compared to Debian-based systems.
+2. **Immutable Containers**: In Docker environments, containers are often rebuilt rather than updated, making `apk upgrade` less necessary.
+3. **Package Management Philosophy**: Alpine’s `apk` combines installation and updating, making a separate `upgrade` command redundant in many cases.
 
-3. **Package Management Philosophy**: Alpine uses `apk` to handle installation and updates in one go. In most use cases, once you install a package using `apk add`, it is assumed you’re running the latest version, negating the need for a separate `upgrade` command.
+Thus, running `apk update` before installing packages is usually sufficient in container environments.
 
-Thus, running `apk update` before installing packages is sufficient to ensure you have the latest versions, making `upgrade` redundant in container environments.
+### Writing and Accessing Secrets
 
-### Writing and accessing secrets
+For managing secrets in GitHub Actions, refer to [GitHub Secrets Documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions).
 
-https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
+### Observation: Docker Compose Build vs. Container Failures
+
+**Observation**: Docker Compose can build all services correctly, but individual containers may still fail without explicit warnings.
+
+**Question**: How can we ensure that containers started by Docker Compose are running correctly and avoid silent failures?
+
+**Answer**: To address this, use the following debugging strategies:
+
+- **Check Container Status**: Use `docker ps -a` to list all containers and their statuses. This helps identify containers that are not running as expected.
+- **View Logs**: Use `docker logs <container_id>` to view the logs of a specific container. This can provide insights into why a container may have failed or is not functioning correctly.
+
+- **Inspect Containers**: Use `docker inspect <container_id>` to get detailed information about a container's configuration and state.
+
+- **Interactive Shell**: Run an interactive shell inside a container using `docker exec -it <container_id> /bin/bash` (or `/bin/sh` if Bash is not available) to troubleshoot issues directly.
+
+By incorporating these strategies, you can better manage and debug your Docker Compose setup.
