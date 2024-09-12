@@ -111,3 +111,52 @@ For managing secrets in GitHub Actions, refer to [GitHub Secrets Documentation](
 - **Interactive Shell**: Run an interactive shell inside a container using `docker exec -it <container_id> /bin/bash` (or `/bin/sh` if Bash is not available) to troubleshoot issues directly.
 
 By incorporating these strategies, you can better manage and debug your Docker Compose setup.
+
+## Commands
+
+### `docker ps`
+
+`docker ps` shows a list of all running Docker containers. By adding the `-a` flag (`docker ps -a`), you can see all containers, including those that are stopped or exited.
+
+**Common Flags for `docker ps`:**
+
+- `-a` or `--all`: Show all containers (default shows just running containers).
+- `-q` or `--quiet`: Show only container IDs.
+- `--filter` or `-f`: Filter output based on conditions provided.
+- `--format`: Format the output using a Go template.
+- `--no-trunc`: Do not truncate output (show full container IDs).
+
+#### 2. Removing Old Containers and Images
+
+To clean up old and unused Docker containers and images, follow these steps:
+
+**Removing Specific Containers:**
+
+You can remove containers by their ID or name. Based on your output:
+
+- Alpine MariaDB container: `mariadb-instance`
+- Midnight Network container: `frosty_faraday`
+- Test containers: `mariadb_test_container` and `maria-test-container`
+
+To remove these containers:
+
+```bash
+docker rm alpine-mariadb
+docker rm midnightnetwork/proof-server
+docker rm mariadb_test_container
+docker rm maria-test-container
+```
+
+**Removing Unused Images:**
+
+To remove unused images, you can use the following command:
+
+```bash
+docker image prune -a
+```
+
+This command removes all unused images. If you want to remove a specific image, use:
+
+```bash
+docker rmi <image-id>
+```

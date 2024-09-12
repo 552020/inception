@@ -26,5 +26,5 @@ RUN chmod +x /init_db.sh && chmod +x /run_alone.sh && chmod +x /test_init_db.sh
 EXPOSE 3306
 
 # Start the database
-# CMD ["bash", "./init_db.sh"]
+CMD ["bash", "./init_db.sh"]
 # CMD ["bash"]

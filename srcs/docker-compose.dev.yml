@@ -18,12 +18,13 @@ services:
   mariadb:
     image: mariadb
     build: requirements/mariadb/
+    container_name: mariadb
     env_file:
       - ../.env
     ports:
       - "3306:3306"
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - ./srcs/data/mysql:/var/lib/mysql
       - ./srcs/requirements/mariadb/conf:/etc/mysql
     secrets:
       - mysql_root_password
@@ -36,7 +37,7 @@ services:
       retries: 3
       timeout: 10s
       start_period: 10s
-    restart: unless-stopped
+    # restart: unless-stopped
 
   wordpress:
     image: wordpress
@@ -63,7 +64,7 @@ services:
       retries: 3
       timeout: 10s
       start_period: 10s
-    restart: unless-stopped
+    # restart: unless-stopped
 
 volumes:
   wordpress-data:
