@@ -4,6 +4,9 @@ services:
     image: nginx
     build: requirements/nginx/
     container_name: nginx
+    depends_on:
+      wordpress:
+        condition: service_healthy
     ports:
       - "80:80"
       - "443:443"
@@ -32,10 +35,10 @@ services:
     networks:
       - inception
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "--silent"]
-      interval: 30s
-      retries: 3
-      timeout: 10s
+      test: ["CMD", "mariadb-admin", "ping", "--silent"]
+      interval: 7s
+      retries: 7
+      timeout: 7s
       start_period: 10s
     # restart: unless-stopped
 
@@ -57,13 +60,14 @@ services:
     networks:
       - inception
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000"]
-      interval: 30s
-      retries: 3
+      test: ["CMD", "wp", "core", "is-installed", "--allow-root"]
+      interval: 10s
       timeout: 10s
-      start_period: 10s
+      retries: 10
+
     # restart: unless-stopped
 
 volumes:

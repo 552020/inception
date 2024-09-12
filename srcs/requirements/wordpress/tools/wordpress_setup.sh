@@ -15,6 +15,12 @@ else
     exit 1
 fi
 
+# Download WordPress core if it's not already installed
+if [ ! -d /var/www/wordpress/wp-admin ]; then
+    echo "Downloading WordPress core files..."
+    wp core download --allow-root || { echo "Failed to download WordPress core!"; exit 1; }
+fi
+
 # Check if wp-config.php already exists and environment variables are set
 if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$DB_HOST" ]; then
 
