@@ -54,4 +54,4 @@ re: fclean all
 
 
 
-.PHONY: all build up down check_files 
+.PHONY: all build up down check_files stop fclean re 
