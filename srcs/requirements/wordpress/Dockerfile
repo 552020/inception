@@ -28,26 +28,11 @@ VOLUME ["/var/www/wordpress"]
 # Copy custom PHP-FPM configuration
 COPY ./conf/www.conf /etc/php81/php-fpm.d/www.conf
 
-# Check if WordPress is already installed, if not, download and extract WordPress
-# RUN mkdir -p /var/www/wordpress && \
-#     if [ ! -d /var/www/wordpress/wp-admin ]; then \
-#     curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz \
-#     && tar -xzf wordpress.tar.gz \
-#     && if [ -d wordpress ]; then \
-#         mv wordpress /var/www/wordpress; \
-#         echo "WordPress directory moved successfully."; \
-#     else \
-#         echo "WordPress directory not found after extraction!"; \
-#         exit 1; \
-#     fi \
-#     && rm wordpress.tar.gz; \
-#     fi
 # Download and extract WordPress
 RUN mkdir -p /var/www/wordpress && \
     curl -o wordpress.tar.gz https://wordpress.org/latest.tar.gz && \
     tar -xzf wordpress.tar.gz -C /var/www/wordpress --strip-components=1 && \
     rm wordpress.tar.gz
-
 
 # Set ownership and appropriate permissions of the WordPress directory
 RUN chown -R www-data:www-data /var/www/wordpress \
@@ -60,9 +45,8 @@ RUN chmod +x /usr/local/bin/wordpress_setup.sh
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
 
-# Run Redis and PHP-FPM, along with the WordPress setup script
-# CMD ["sh", "-c", "redis-server --daemonize yes && /usr/local/bin/wordpress_setup.sh"]
-# Temporary workaround: Start only PHP-FPM without running the WordPress setup script
-# CMD ["php-fpm81", "-F"]
-# Start PHP-FPM along with the WordPress setup script
-CMD ["sh", "-c", "/usr/local/bin/wordpress_setup.sh"]
+# Set the WordPress setup script as the ENTRYPOINT
+ENTRYPOINT ["/usr/local/bin/wordpress_setup.sh"]
+
+# Run PHP-FPM as the CMD (this will be executed after the setup script)
+CMD ["php-fpm81", "-F"]

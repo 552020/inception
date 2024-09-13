@@ -34,7 +34,8 @@ services:
     networks:
       - inception
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "--silent || exit 1"]
+      # test: ["CMD", "mariadb-admin", "ping", " || exit 1"]
+      test: ["CMD-SHELL", "mariadb-admin ping -u root -p$$(cat /run/secrets/mysql_root_password) || exit 1"]
       interval: 10s
       retries: 18
       timeout: 10s
@@ -48,7 +49,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - /data/wordpress:/var/www/wordpress
+      - ./data/wordpress:/var/www/wordpress
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -63,10 +64,11 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wp core is-installed --allow-root || exit 1"]
-      interval: 10s
-      retries: 5
-      timeout: 10s
-    # restart: unless-stopped
+      interval: 10s # Check every 10 seconds
+      retries: 20 # Increase retries to give it more time
+      timeout: 30s # Give each health check more time before it fails
+      start_period: 60s # Delay the start of the health check to give more time for WordPress to initialize
+  # restart: unless-stopped
 
 volumes:
   wordpress-data:
