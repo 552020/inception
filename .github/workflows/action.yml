@@ -41,7 +41,7 @@ jobs:
             echo "${{ secrets.WP_USER_PASSWORD }}" > ./secrets/wp_user_password.txt &&
 
             # Pull the latest code and run the Makefile
-            git pull && make up &&
+            git pull && make all &&
 
             # Optionally clean up the secret files after they have been used
             rm ./secrets/mysql_root_password.txt &&
