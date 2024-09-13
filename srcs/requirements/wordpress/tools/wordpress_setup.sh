@@ -28,6 +28,27 @@ if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWOR
     exit 1
 fi
 
+# Print out database connection details for debugging
+echo "Attempting to connect to MariaDB:"
+echo "DB_HOST: $DB_HOST"
+echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+echo "MYSQL_USER: $MYSQL_USER"
+echo "MYSQL_USER_PASSWORD: $MYSQL_USER_PASSWORD"
+
+# Test the connection to MariaDB before proceeding
+timeout=180
+waited=0
+until mysqladmin ping --host=$DB_HOST --user=$MYSQL_USER --password=$MYSQL_USER_PASSWORD --silent; do
+    echo "Waiting for MariaDB connection... waited ${waited} seconds."
+    sleep 5
+    waited=$((waited+5))
+    if [ "$waited" -ge "$timeout" ]; then
+        echo "MariaDB connection timed out after ${waited} seconds!"
+        exit 1
+    fi
+done
+echo "MariaDB connection established."
+
 # Generate wp-config.php if it doesn't exist
 if [ ! -e /var/www/wordpress/wp-config.php ]; then
     echo "Creating wp-config.php..."

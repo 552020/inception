@@ -68,10 +68,18 @@ else
 fi
 
 
-# Initialize the MariaDB database (always try to initialize to ensure system tables exist)
-echo "Initializing MariaDB data directory..."
-mysql_install_db --user=mysql --datadir=/var/lib/mysql || { echo "Error: Failed to initialize MariaDB data directory."; exit 1; }
+# Set the path to the MariaDB data directory
+DATA_DIR="/var/lib/mysql"
 
+# Check if the MariaDB data directory is already initialized
+if [ -d "$DATA_DIR/mysql" ]; then
+    echo "MariaDB data directory already exists. Skipping initialization."
+else
+    echo "MariaDB data directory not found. Initializing..."
+    
+    # Initialize the MariaDB database
+    mysql_install_db --user=mysql --datadir="$DATA_DIR" || { echo "Error: Failed to initialize MariaDB data directory."; exit 1; }
+fi
 
 # Start MySQL/MariaDB service
 echo "Starting MariaDB service..."

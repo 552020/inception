@@ -6,6 +6,10 @@ https://en.wikipedia.org/wiki/MariaDB
 
 - **`mariadb-client`** is the command-line tool for interacting with a MariaDB or MySQL server. It’s essential if you need to interact with MariaDB from the container itself. In a minimal production environment, if the MariaDB container is solely for running the database, the client is not strictly necessary. However, it's useful for testing and manual database management within the container.
 
+## How to install it
+
+https://mariadb.com/kb/en/installing-system-tables-mariadb-install-db/
+
 ### Syncing Databases Between Droplet, Local Machine, and VM for Evaluation
 
 To sync the databases between environments (e.g., the production droplet, your local machine, and the VM for evaluation), follow these steps:
@@ -76,8 +80,7 @@ To start mariadbd at boot time you have to copy
 support-files/mariadb.service to the right place for your system
 
 Two all-privilege accounts were created.
-One is root@localhost, it has no password, but you need to
-be system 'root' user to connect. Use, for example, sudo mysql
+One is root@localhost, it has no password, but you need to be system 'root' user to connect. Use, for example, sudo mysql
 The second is mysql@localhost, it has no password either, but
 you need to be the system 'mysql' user to connect.
 After connecting you can set the password, if you would need to be

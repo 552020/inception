@@ -20,26 +20,25 @@ services:
 
   mariadb:
     image: mariadb
-    build: requirements/mariadb/
+    build: ./requirements/mariadb/
     container_name: mariadb
     env_file:
       - ../.env
     ports:
       - "3306:3306"
     volumes:
-      - ./srcs/data/mysql:/var/lib/mysql
-      - ./srcs/requirements/mariadb/conf:/etc/mysql
+      - ./data/mysql:/var/lib/mysql
     secrets:
       - mysql_root_password
       - mysql_user_password
     networks:
       - inception
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "--silent"]
-      interval: 7s
-      retries: 7
-      timeout: 7s
-      start_period: 10s
+      test: ["CMD", "mariadb-admin", "ping", "--silent || exit 1"]
+      interval: 10s
+      retries: 18
+      timeout: 10s
+      start_period: 30s
     # restart: unless-stopped
 
   wordpress:
@@ -49,7 +48,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - wordpress-data:/var/www/wordpress
+      - /data/wordpress:/var/www/wordpress
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -63,11 +62,10 @@ services:
       mariadb:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wp", "core", "is-installed", "--allow-root"]
+      test: ["CMD-SHELL", "wp core is-installed --allow-root || exit 1"]
       interval: 10s
+      retries: 5
       timeout: 10s
-      retries: 10
-
     # restart: unless-stopped
 
 volumes:
