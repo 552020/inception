@@ -14,7 +14,7 @@ You then have to set up:
 
 - [x] A Docker container that contains NGINX with TLSv1.2 or TLSv1.3 only.
 
-- [ ] To make things simpler, you have to configure your domain name so it points to your local IP address. This domain name must be login.42.fr. Again, you have to use your own login. For example, if your login is wil, wil.42.fr will redirect to the IP address pointing to wil’s website.
+- [x] To make things simpler, you have to configure your domain name so it points to your local IP address. This domain name must be login.42.fr. Again, you have to use your own login. For example, if your login is wil, wil.42.fr will redirect to the IP address pointing to wil’s website.
 
 We have 3 environments:
 
