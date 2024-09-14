@@ -28,7 +28,8 @@ RUN mkdir -p /run/nginx /var/www/wordpress var/www/html
 RUN echo "<h1>Hello from localhost!</h1>" > /var/www/html/index.html
 
 # Ensure correct ownership of the web directories
-RUN chown -R www-data:www-data /var/www/wordpress
+RUN chown -R www-data:www-data /var/www/wordpress && chmod -R 755 /var/www/wordpress
+
 
 # Expose port 443 for HTTPS
 EXPOSE 443

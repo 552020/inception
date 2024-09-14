@@ -11,7 +11,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - wordpress-data:/var/www/html
+      - ./data/wordpress:/var/www/wordpress
       - ./srcs/requirements/nginx/conf:/etc/nginx/conf.d
       - ./certbot-etc:/etc/letsencrypt # Mount for SSL certificates
 
