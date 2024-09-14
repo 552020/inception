@@ -62,12 +62,23 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD-SHELL", "wp core is-installed --allow-root || exit 1"]
+    #   interval: 10s # Check every 10 seconds
+    #   retries: 20 # Increase retries to give it more time
+    #   timeout: 30s # Give each health check more time before it fails
+    #   start_period: 60s # Delay the start of the health check to give more time for WordPress to initialize
     healthcheck:
-      test: ["CMD-SHELL", "wp core is-installed --allow-root || exit 1"]
-      interval: 10s # Check every 10 seconds
-      retries: 20 # Increase retries to give it more time
-      timeout: 30s # Give each health check more time before it fails
-      start_period: 60s # Delay the start of the health check to give more time for WordPress to initialize
+      test:
+        [
+          "CMD-SHELL",
+          "wp core is-installed --allow-root --path='/var/www/wordpress' || (echo 'Health check failed' && exit 1)",
+        ]
+      interval: 10s
+      retries: 20
+      timeout: 30s
+      start_period: 60s
+    restart: unless-stopped
   # restart: unless-stopped
 
 volumes:

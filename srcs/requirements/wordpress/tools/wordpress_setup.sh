@@ -80,10 +80,39 @@ else
     echo "User $WP_USER_NAME already exists."
 fi
 
-# # Ensure PHP-FPM directory exists
-# if [ ! -d /run/php ]; then
-#     mkdir /run/php
-# fi
+# Ensure PHP-FPM directory exists
+if [ ! -d /run/php ]; then
+    mkdir /run/php
+fi
 
-# # Run PHP-FPM
-# php-fpm81 -F
+# Start PHP-FPM to keep the container running
+echo "Starting PHP-FPM..."
+php-fpm81 -F &
+sleep 5  # Give PHP-FPM some time to start
+
+# Loop to check if PHP-FPM is running
+timeout=60  # Maximum time to wait for PHP-FPM to start
+waited=0    # Time spent waiting
+
+# Wait until PHP-FPM starts
+while ! pgrep php-fpm > /dev/null; do
+    echo "PHP-FPM is not running yet. Waiting..."
+    sleep 3
+    waited=$((waited+3))
+
+    if [ "$waited" -ge "$timeout" ]; then
+        echo "Error: PHP-FPM took too long to start. Exiting..."
+        exit 1
+    fi
+done
+
+echo "PHP-FPM is running successfully."
+
+# Continuous loop to monitor PHP-FPM
+while true; do
+    if ! pgrep php-fpm > /dev/null; then
+        echo "Error: PHP-FPM has stopped unexpectedly. Exiting..."
+        exit 1
+    fi
+    sleep 10  # Check every 10 seconds
+done
