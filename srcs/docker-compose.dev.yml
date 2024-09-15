@@ -23,8 +23,6 @@ services:
     container_name: mariadb
     env_file:
       - ../.env
-    ports:
-      - "3306:3306"
     volumes:
       - ${INCEPTION_DATA_PATH}/mysql:/var/lib/mysql
     secrets:
@@ -54,8 +52,6 @@ services:
       - mysql_user_password
       - wp_admin_password
       - wp_user_password
-    ports:
-      - "9000:9000"
     networks:
       - inception
     depends_on:
