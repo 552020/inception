@@ -29,26 +29,26 @@ check_files:
 
 build: check_files
 	@echo "Building the application..."
-	docker compose -f $(COMPOSE_FILE) build
+	docker compose -f $(COMPOSE_FILE) --env-file .env build
 
 up: check_files
 	@echo "Starting the application..."
-	docker compose -f $(COMPOSE_FILE) up $(COMPOSE_OPTIONS)
+	docker compose -f $(COMPOSE_FILE) --env-file .env up  $(COMPOSE_OPTIONS) 
 
 # Stop the containers without removing them
 stop: 
 	@echo "Stopping the application..."
-	docker compose -f ./srcs/docker-compose.dev.yml stop
+	docker compose -f ./srcs/docker-compose.dev.yml  --env-file .env stop
 
 
 # Stop the containers and remove them
 down:
 	@echo "Stopping and removing containers..."
-	docker compose -f ./srcs/docker-compose.dev.yml down
+	docker compose -f ./srcs/docker-compose.dev.yml --env-file .env down
 
 fclean:
 	@echo "Stopping and removing containers, networks, volumes, and images..."
-	docker compose -f $(COMPOSE_FILE) down --rmi all
+	docker compose -f $(COMPOSE_FILE) --env-file .env down --rmi all
 
 re: fclean all
 

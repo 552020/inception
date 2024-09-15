@@ -63,4 +63,17 @@ else
     echo "slombard.42.fr is already in /etc/hosts."
 fi
 
+# Get the current username
+current_user=$(whoami)
+# Create the directory if it doesn't exist
+export INCEPTION_DATA_PATH="/home/${current_user}/data"
+mkdir -p "${INCEPTION_DATA_PATH}"
+# Set the INCEPTION_DATA_PATH using the current user's home directory
+# Ensure only one instance of INCEPTION_DATA_PATH is written to .env
+if ! grep -q "INCEPTION_DATA_PATH" .env; then
+    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> ./.env
+fi
+echo "Droplet setup complete with INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}"
+
+
 echo "Droplet environment setup complete."

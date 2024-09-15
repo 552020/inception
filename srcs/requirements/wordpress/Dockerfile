@@ -22,7 +22,7 @@ RUN curl -o wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages
 RUN if ! getent group www-data > /dev/null; then addgroup -S www-data; fi \
     && if ! id -u www-data > /dev/null 2>&1; then adduser -S -G www-data www-data; fi
 
-# Set up volumes for WordPress files (declared early for persistent data handling)
+# Set up volumes for WordPress files (declared early for persistent data handling), in the actual setup this doesn't do anything cause we have the declaration in the docker-compose file
 VOLUME ["/var/www/wordpress"]
 
 # Copy custom PHP-FPM configuration

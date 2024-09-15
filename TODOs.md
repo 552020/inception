@@ -19,7 +19,7 @@ You then have to set up:
 - [x] A second volume that contains your WordPress website files.
 - [x] A docker-network that establishes the connection between your containers.
 
-- [ ] Your containers have to restart in case of a crash.
+- [x] Your containers have to restart in case of a crash.
 
 - [ ] Read and understand I: A Docker container is not a virtual machine. Thus, it is not recommended to use any hacky patch based on ’tail -f’ and so forth when trying to run it. Read about how daemons work and whether it’s a good idea to use them or not.
 

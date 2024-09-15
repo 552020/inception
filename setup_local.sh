@@ -53,4 +53,19 @@ else
     echo "Self-signed certificates for myricae.xyz already exist."
 fi
 
+# Get the current username
+current_user=$(whoami)
+# Set the INCEPTION_DATA_PATH using the current user's home directory
+export INCEPTION_DATA_PATH="/Users/${current_user}/data"
+# Create the directory if it doesn't exist
+mkdir -p "${INCEPTION_DATA_PATH}"
+# Optionally write to .env file for Docker Compose
+# Ensure only one instance of INCEPTION_DATA_PATH is written to .env
+if ! grep -q "INCEPTION_DATA_PATH" .env; then
+    echo "" >> ./.env
+    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> ./.env
+fi
+echo "Local setup complete with INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}"
+
+
 echo "Local environment setup complete."

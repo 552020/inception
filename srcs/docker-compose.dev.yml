@@ -11,12 +11,12 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./data/wordpress:/var/www/wordpress
+      - ${INCEPTION_DATA_PATH}/wordpress:/var/www/wordpress
       - ./srcs/requirements/nginx/conf:/etc/nginx/conf.d
       - ./certbot-etc:/etc/letsencrypt # Mount for SSL certificates
-
     networks:
       - inception
+    restart: unless-stopped
 
   mariadb:
     image: mariadb
@@ -27,7 +27,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./data/mysql:/var/lib/mysql
+      - ${INCEPTION_DATA_PATH}/mysql:/var/lib/mysql
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -40,7 +40,7 @@ services:
       retries: 18
       timeout: 10s
       start_period: 30s
-    # restart: unless-stopped
+    restart: unless-stopped
 
   wordpress:
     image: wordpress
@@ -49,7 +49,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - ./data/wordpress:/var/www/wordpress
+      - ${INCEPTION_DATA_PATH}/wordpress:/var/www/wordpress
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -62,12 +62,6 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wp core is-installed --allow-root || exit 1"]
-    #   interval: 10s # Check every 10 seconds
-    #   retries: 20 # Increase retries to give it more time
-    #   timeout: 30s # Give each health check more time before it fails
-    #   start_period: 60s # Delay the start of the health check to give more time for WordPress to initialize
     healthcheck:
       test:
         [
@@ -79,10 +73,6 @@ services:
       timeout: 30s
       start_period: 60s
     restart: unless-stopped
-  # restart: unless-stopped
-
-volumes:
-  wordpress-data:
 
 networks:
   inception:

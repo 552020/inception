@@ -1,6 +1,8 @@
 # Inception as a Real-World Project
 
-This repository is about making "Inception" a practical, real-world project.
+This repository is about making "Inception" a real-world project.
+
+Disclaimer I: since the requirements for the wordpress website we need to serve are not tailored as a real world project (the website needs to be accessible from localhost), this is also the way we configure the project, i.e. adding a rule so that the requests to <login>.42.fr are redirected to localhost. This allows to test the website in a local environment. To change this behaviour and making the website accessible from the outside, we need that the machine has a public IP and a domain name, that should be something else from <login>.42.fr, since this is not a domain we own.
 
 ## Digital Ocean VM and Local Development
 
@@ -49,20 +51,55 @@ This approach ensures secure communication between GitHub Actions and your remot
 
 ## Notes
 
-- **Avoid Using Root for SSH on the droplet**: It is not recommended to use root for SSH access. Instead, create a new user, grant them sudo privileges, and disable root SSH login:
+### **Avoid Using Root for SSH on the droplet**: It is not recommended to use root for SSH access. Instead, create a new user, grant them sudo privileges, and disable root SSH login:
 
-  ```bash
-  adduser newuser
-  usermod -aG sudo newuser
-  ```
+```bash
+adduser newuser
+usermod -aG sudo newuser
+```
 
-  Edit the SSH configuration to disable root login:
+Edit the SSH configuration to disable root login:
 
-  ```bash
-  vim /etc/ssh/sshd_config
-  PermitRootLogin no
-  sudo systemctl restart ssh
-  ```
+```bash
+vim /etc/ssh/sshd_config
+PermitRootLogin no
+sudo systemctl restart ssh
+```
+
+### Unified Path for Docker Volumes Between macOS, Ubuntu, and a Virtual Machine
+
+#### Problem Statement
+
+In the subject, we are required to store the two volumes for WordPress and MariaDB in the directory `/home/login/data`, where `login` should be our own 42 login (in this case, `/home/slombard/data`). These volumes need to persist outside of Docker containers, ensuring data remains even when containers are removed or recreated.
+
+The challenge is to ensure these volumes work across different environments:
+
+- A **DigitalOcean droplet** with Ubuntu.
+- A **MacBook Air** running macOS.
+- A **school Ubuntu machine** where a virtual machine (VM) will be used.
+
+#### The Challenge: Home Directory Differences in Ubuntu and macOS
+
+The key issue is that each environment uses a different path for the user's home directory. Ubuntu uses `/home/username/`, while macOS uses `/Users/username/`. The `~` shortcut works for user directories in terminal commands, but it doesn't work in Docker Compose volume definitions, which means we need to reference paths explicitly.
+
+#### Solution: Dynamic Environment Variable for Volume Paths
+
+To unify the volume paths across environments, we can use an environment variable (e.g., `INCEPTION_DATA_PATH`) that stores the correct path dynamically based on the current user. By using the `whoami` command, we can retrieve the username and automatically configure the volume paths accordingly.
+
+- **Ubuntu (DigitalOcean droplet & school VM):** The home directory is `/home/username/`.
+- **macOS:** The home directory is `/Users/username/`.
+
+The environment variable `INCEPTION_DATA_PATH` will be set in a setup script that checks the operating system and retrieves the current user's name with `whoami`. The script will create the necessary directories if they don’t exist, ensuring consistency across environments.
+
+#### How the Setup Works
+
+1. **Dynamic User Detection:** The script uses `whoami` to detect the current user and constructs the correct home directory path, whether on macOS or Ubuntu.
+2. **Environment Variable for Docker Compose:** The path is stored in `INCEPTION_DATA_PATH`, which is then used in the `docker-compose.yml` file for volume definitions. This ensures that the same Compose file works on all environments.
+3. **Directory Creation:** The script ensures the volume directories exist on each machine by creating them if necessary.
+
+#### Conclusion
+
+By dynamically setting the volume path using environment variables and detecting the current user with `whoami`, we create a unified setup that works seamlessly across Ubuntu and macOS environments without modifying Docker Compose files manually. This approach ensures flexibility and persistence of data across all systems.
 
 ## FAQ
 
