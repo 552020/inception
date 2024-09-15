@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Log the start of the script
+echo "Starting WordPress setup script..."
+
 # Retrieve the passwords from Docker secrets
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
 MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
@@ -11,8 +14,9 @@ export HTTP_HOST="$DOMAIN_NAME"
 # Check if the WordPress directory exists
 if [ -d /var/www/wordpress ]; then
     cd /var/www/wordpress
+    echo "Navigated to WordPress directory."
 else
-    echo "WordPress directory not found!"
+    echo "Error: WordPress directory not found!"
     exit 1
 fi
 
@@ -26,6 +30,8 @@ fi
 if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWORD" ] || [ -z "$DB_HOST" ]; then
     echo "Database credentials not set!"
     exit 1
+else
+    echo "Database credentials set."
 fi
 
 # Test the connection to MariaDB before proceeding
@@ -51,6 +57,8 @@ if [ ! -e /var/www/wordpress/wp-config.php ]; then
                      --dbpass=$MYSQL_USER_PASSWORD \
                      --dbhost=$DB_HOST \
                      || { echo "wp-config.php creation failed!"; exit 1; }
+else
+    echo "wp-config.php already exists. Skipping creation."
 fi
 
 # Check if WordPress is already installed
@@ -83,6 +91,7 @@ fi
 # Ensure PHP-FPM directory exists
 if [ ! -d /run/php ]; then
     mkdir /run/php
+    echo "Created PHP-FPM directory."
 fi
 
 # Start PHP-FPM to keep the container running
