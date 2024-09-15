@@ -11,13 +11,6 @@ WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 
 export HTTP_HOST="$DOMAIN_NAME"
 
-# Print all the environment variables and passwords (for debugging purposes)
-echo "DB_HOST: $DB_HOST"
-echo "MYSQL_DATABASE: $MYSQL_DATABASE"
-echo "MYSQL_USER: $MYSQL_USER"
-echo "MYSQL_USER_PASSWORD: $MYSQL_USER_PASSWORD"  # Be cautious: this logs the password!
-
-
 # Check if the WordPress directory exists
 if [ -d /var/www/wordpress ]; then
     cd /var/www/wordpress
@@ -40,12 +33,6 @@ if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_USER_PASSWOR
 else
     echo "Database credentials set."
 fi
-
-# Print the values used for MariaDB connection
-echo "Attempting to connect to MariaDB with:"
-echo "Host: $DB_HOST"
-echo "User: $MYSQL_USER"
-echo "Password: $MYSQL_USER_PASSWORD"  # Be cautious: this logs the password!
 
 
 # Test the connection to MariaDB before proceeding
