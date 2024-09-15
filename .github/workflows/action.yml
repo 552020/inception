@@ -41,5 +41,5 @@ jobs:
             echo "${{ secrets.WP_USER_PASSWORD }}" > ./secrets/wp_user_password.txt &&
 
             # Pull the latest code and run the Makefile
-            git pull && make re 
+            git pull && make re && exit
           '
