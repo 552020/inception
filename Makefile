@@ -1,5 +1,5 @@
 
-COMPOSE_FILE=./srcs/docker-compose.dev.yml
+COMPOSE_FILE=./srcs/docker-compose.yml
 
 # Default value for detached mode. "false" is just a string, not a boolean. The ?= operator is used to set the value only if it is not already set. This makes possible to assign detached=true when calling make, like this: make detached=true
 detached ?= false
@@ -38,13 +38,13 @@ up: check_files
 # Stop the containers without removing them
 stop: 
 	@echo "Stopping the application..."
-	docker compose -f ./srcs/docker-compose.dev.yml  --env-file .env stop
+	docker compose -f $(COMPOSE_FILE)  --env-file .env stop
 
 
 # Stop the containers and remove them
 down:
 	@echo "Stopping and removing containers..."
-	docker compose -f ./srcs/docker-compose.dev.yml --env-file .env down
+	docker compose -f $(COMPOSE_FILE) --env-file .env down
 
 fclean:
 	@echo "Stopping and removing containers, networks, volumes, and images..."
