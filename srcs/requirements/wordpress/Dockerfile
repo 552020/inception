@@ -47,6 +47,3 @@ EXPOSE 9000
 
 # Set the WordPress setup script as the ENTRYPOINT
 ENTRYPOINT ["/usr/local/bin/wordpress_setup.sh"]
-
-# # Run PHP-FPM as the CMD (this will be executed after the setup script)
-# CMD ["php-fpm81", "-F"]
