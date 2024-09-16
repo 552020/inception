@@ -19,7 +19,8 @@ RUN mkdir -p /etc/nginx/ssl \
        -subj "/C=DE/ST=Berlin/L=Berlin/O=42/OU=42/CN=localhost"
 
 # Copy custom NGINX configuration file into the container
-COPY ./conf/default.conf /etc/nginx/nginx.conf
+COPY ./conf/${NGINX_CONF_FILE} /etc/nginx/nginx.conf
+
 
 # Create the necessary directories for NGINX and WordPress
 RUN mkdir -p /run/nginx /var/www/wordpress var/www/html

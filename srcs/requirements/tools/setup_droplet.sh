@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Define the root of the project as three directories up from the current directory
+ROOT=../../../
+
+# Define the path to the .env file
+ENV_FILE="${ROOT}/.env"
+
 # Check if the OS is Ubuntu
 if [ -f /etc/os-release ]; then
     . /etc/os-release
@@ -54,26 +60,25 @@ else
     echo "Make is already installed."
 fi
 
-# Check if slombard.42.fr is already mapped to localhost in /etc/hosts
-if ! grep -q "slombard.42.fr" /etc/hosts; then
-    echo "Adding slombard.42.fr to /etc/hosts..."
-    sudo sh -c 'echo "127.0.0.1 slombard.42.fr" >> /etc/hosts'
-    echo "slombard.42.fr has been added to /etc/hosts."
-else
-    echo "slombard.42.fr is already in /etc/hosts."
-fi
-
 # Get the current username
 current_user=$(whoami)
 # Create the directory if it doesn't exist
 export INCEPTION_DATA_PATH="/home/${current_user}/data"
+
+# Create the directory if it doesn't exist
 mkdir -p "${INCEPTION_DATA_PATH}"
-# Set the INCEPTION_DATA_PATH using the current user's home directory
+
 # Ensure only one instance of INCEPTION_DATA_PATH is written to .env
-if ! grep -q "INCEPTION_DATA_PATH" .env; then
-    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> ./.env
+if ! grep -q "INCEPTION_DATA_PATH" "${ENV_FILE}"; then
+    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> "${ENV_FILE}"
 fi
+
+# Safely update NGINX_CONF_FILE to 'droplet.conf' in the .env file
+sed -i 's/^NGINX_CONF_FILE=.*/NGINX_CONF_FILE=droplet.conf/' "${ENV_FILE}"
+
+# Display the contents of .env to confirm the changes
+echo "Updated .env file content:"
+cat "${ENV_FILE}"
+
+
 echo "Droplet setup complete with INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}"
-
-
-echo "Droplet environment setup complete."

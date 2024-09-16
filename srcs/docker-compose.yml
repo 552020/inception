@@ -3,6 +3,8 @@ services:
     image: nginx
     build: requirements/nginx/
     container_name: nginx
+    args:
+      NGINX_CONF_FILE: ${NGINX_CONF_FILE} # Dynamically pass the variable from .env file. The location not being .env is set in the Makefile
     depends_on:
       wordpress:
         condition: service_healthy
@@ -11,7 +13,7 @@ services:
       - "443:443"
     volumes:
       - ${INCEPTION_DATA_PATH}/wordpress:/var/www/wordpress
-      - ./certbot-etc:/etc/letsencrypt # Mount for SSL certificates
+      - ./certbot-etc:/etc/letsencrypt
     networks:
       - inception
     restart: unless-stopped
