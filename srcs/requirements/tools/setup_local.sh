@@ -67,7 +67,7 @@ export INCEPTION_DATA_PATH="/Users/${current_user}/data"
 mkdir -p "${INCEPTION_DATA_PATH}"
 # Optionally write to .env file for Docker Compose
 # Ensure only one instance of INCEPTION_DATA_PATH is written to .env
-if ! grep -q "INCEPTION_DATA_PATH" .env; then
+if ! grep -q "INCEPTION_DATA_PATH" "${ENV_FILE}"; then
     echo "" >> "${ENV_FILE}"
     echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> "${ENV_FILE}"
 
