@@ -89,6 +89,20 @@ else
     echo "User $WP_USER_NAME already exists."
 fi
 
+# Add the Twenty Twenty-Two theme installation and activation here
+# Check if the Twenty Twenty-Two theme is already installed
+if ! wp theme is-installed twentytwentytwo --allow-root; then
+    echo "Installing Twenty Twenty-Two theme..."
+    wp theme install twentytwentytwo --allow-root || { echo "Theme installation failed!"; exit 1; }
+else
+    echo "Twenty Twenty-Two theme is already installed."
+fi
+
+# Activate the Twenty Twenty-Two theme
+echo "Activating Twenty Twenty-Two theme..."
+wp theme activate twentytwentytwo --allow-root || { echo "Theme activation failed!"; exit 1; }
+echo "Twenty Twenty-Two theme activated successfully."
+
 # Ensure PHP-FPM directory exists
 if [ ! -d /run/php ]; then
     mkdir /run/php
