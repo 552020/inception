@@ -1,4 +1,6 @@
 .env
 secrets/
+secretus/
 srcs/certbot-etc/
 srcs/data/
+tests/mariadb/mysqldata
