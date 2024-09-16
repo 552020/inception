@@ -197,3 +197,96 @@ This command removes all unused images. If you want to remove a specific image, 
 ```bash
 docker rmi <image-id>
 ```
+
+# Inception
+
+## Docker Overview
+
+### What is a Docker Container?
+
+A Docker container is a lightweight, portable, and isolated environment that allows applications to run consistently across different computing environments.
+
+**Expanded definition**:  
+A Docker container is a complete, isolated package that encapsulates an application along with its dependencies, libraries, and configuration files. It leverages the host system's kernel, making it efficient and portable across various environments. Containers ensure that applications run consistently regardless of the underlying infrastructure, reducing the overhead associated with full virtual machines while providing robust isolation and ease of deployment.
+
+## History of Docker
+
+Docker was introduced to the public in March 2013 by a company called dotCloud, which later rebranded as Docker, Inc. The idea behind Docker was to solve the common problem of "it works on my machine," providing developers with a consistent environment in which to run their applications. Docker leverages containerization technology, which had been around in various forms in the Linux ecosystem, but Docker made it more accessible and usable by simplifying container management.
+
+The launch of Docker marked a significant shift in the way developers and IT operations approached software deployment. The open-source project quickly gained popularity, becoming a cornerstone of modern DevOps practices, and leading to the creation of a vast ecosystem around it. Docker's approach to containerization has revolutionized software development, enabling the rise of microservices architectures, cloud-native applications, and continuous integration/continuous deployment (CI/CD) pipelines.
+
+Docker, Inc. has since continued to develop and expand its platform, contributing to the broader container ecosystem, which includes orchestration tools like Kubernetes, integration with cloud providers, and development of enterprise-grade container management solutions.
+
+### Docker images vs. Docker containers
+
+### Alpine vs Debian
+
+## Choosing Between Alpine and Debian for Docker
+
+In this project, we need to build Docker images for various services like NGINX, WordPress, and MariaDB. A critical decision is choosing the base operating system for these images. The two most common options are Alpine and Debian.
+
+### Alpine
+
+Alpine is a minimalistic Linux distribution designed specifically for environments where size, speed, and security are paramount. It is commonly used in Docker containers due to its small footprint and simplicity.
+
+#### Advantages in This Project
+
+- **Small Image Size**: Alpine is significantly smaller than Debian, which leads to faster download times and reduced storage usage. This is particularly advantageous in a Docker environment where efficiency is crucial.
+- **Security**: The minimal nature of Alpine reduces the attack surface, making it inherently more secure. Fewer installed packages mean fewer potential vulnerabilities.
+- **Efficiency**: For services like NGINX, Alpine provides all the necessary components without the overhead of unnecessary packages, resulting in faster builds and leaner containers.
+
+#### Considerations
+
+- **Compatibility**: Alpine uses `musl` instead of the more common `glibc`, which can sometimes lead to compatibility issues with certain software. However, for standard services like NGINX and MariaDB, this is rarely a problem.
+- **Learning Curve**: Alpine’s minimalism can be a double-edged sword; it requires more manual setup and configuration compared to Debian, which might introduce a slight learning curve.
+
+### Debian
+
+Debian is one of the most widely used and stable Linux distributions. It is known for its robustness, extensive package repositories, and broad software compatibility.
+
+#### Advantages in This Project
+
+- **Stability and Compatibility**: Debian is known for its stability and uses `glibc`, ensuring broad compatibility with a wide range of software. This can make it easier to set up and manage services without worrying about compatibility issues.
+- **Ease of Use**: Debian’s comprehensive package manager and the inclusion of many utilities by default make it more straightforward to set up and maintain services. This can be beneficial if your project requires additional tools or packages.
+
+#### Considerations
+
+- **Larger Image Size**: Debian images are larger than Alpine, which can lead to longer download times and increased storage usage. In a Docker environment, this can be less efficient.
+- **Overhead**: The additional packages and utilities included in Debian, while sometimes useful, can also introduce unnecessary overhead in a containerized environment where minimalism is often preferred.
+
+### Conclusion
+
+We pick up Alpine. We pick up the 3.19 version which is the penultimate stable version on 1.st of September 2024
+
+## Docker commands
+
+To start a container we need first to build it and then to run it.
+
+### build
+
+`docker build <path/to/Dockerfile>`
+
+flags:
+
+- `-t <name>` to name a container
+
+### run
+
+`docker run <image_name>`
+
+### ps
+
+To know the containers currently launched
+
+# TLS v1.2 vs TLS v1.3
+
+- What is the difference betweeen a self issued certificate and a certificate issued by a CA.
+- What is the certificate attesting?
+- How to generate a self issued certificate?
+- How to get a certificate issued by a CA?
+
+## Resources
+
+https://tuto.grademe.fr/inception/
+
+https://letsencrypt.org/

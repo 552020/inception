@@ -152,3 +152,17 @@ This project consists in setting up a small infrastructure composed of different
 **Bonus**
 
 - [ ] Evaluate the bonus part if, and only if, the mandatory part has been entirely and perfectly done, and the error management handles unexpected or bad usage. In case all the mandatory points were not passed during the defense, bonus points must be totally ignored. Add 1 point per bonus authorized in the subject. Verify and test the proper functioning and implementation of each extra service. For the free choice service, the evaluated student has to give you a simple explanation about how it works and why they think it is useful.
+
+## Extra
+
+- [ ] Solve problem of having the wordpress website served as slombard.42.fr on localhost with self-signed certicates and as slombard.xyz with SSL/TLS certificates. The main problem was the fact that Wordpress needs a specific URL in the configuration. With two server blocks, one serving slombard.42.fr with self-signed certificates and another server block for slombard.xyz with SSL/TLS certificates, images were not properly delivered. There are different possible solutions to the problem: a. duplicate the websites (double wordpress container and double mariadb container), b. allow multi-site wordpress, c. allow multi-url website, d. have slombard.42.fr only in the eval environment. We'll go for the last one.
+
+- [ ] Design custom build for the eval environment.
+
+- [ ] Custom _NGINX config_. We need to have an ad hoc eval.conf NGINX config file and a config file for the droplet (which will be used also for local development). We will have the file as env variables and change it depending the environment on the environemnt (eval or droplet). The local environemnt will use the same config of the droplet, the certificates will be self-signed, but located at the same place where the TLS/SSL certificates are. - [ ] We need to specify conditionally, depending on the environemnt (eval vs drplet/local) the URL of the website, which is already an env variable.
+
+- [ ] Change Wordpress Theme. https://wordpress.org/themes/
+
+- [] Move setup scripts to srcs/tools
+
+  - [] Understand the debate about the `.env` file: https://42born2code.slack.com/archives/C04C5N7EWS2/p1709318094589039
