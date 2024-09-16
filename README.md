@@ -1,8 +1,34 @@
-# Inception as a Real-World Project
+# Inception (as a Real-World Project)
+
+**Inception** is a school project for 42 Berlin about setting up a Dockerized self-hosted infrastructure for serving a WordPress website with NGINX, MariaDB, and optional additional services like Redis, FTP, and Adminer.
+
+**Disclaimer:** As a school project that needs to be evaluated on a school machine (without a public IP and without sudo rights), the subject imposes some limitations:
+
+1. The WordPress website needs to be served to localhost by redirecting the required website domain `<login>.42.fr` to localhost through tweaking the `/etc/hosts` file.
+2. Since we don't have sudo rights on the Ubuntu machine where the evaluation will take place, development must occur on a virtual machine (VM).
+3. Therefore, the SSL/TLS certificates will be self-signed.
 
 This repository is about making "Inception" a real-world project.
 
-Disclaimer I: since the requirements for the wordpress website we need to serve are not tailored as a real world project (the website needs to be accessible from localhost), this is also the way we configure the project, i.e. adding a rule so that the requests to <login>.42.fr are redirected to localhost. This allows to test the website in a local environment. To change this behaviour and making the website accessible from the outside, we need that the machine has a public IP and a domain name, that should be something else from <login>.42.fr, since this is not a domain we own.
+Here’s an updated version including the new description of the three environments:
+
+---
+
+**Inception** is a school project for 42 Berlin focused on setting up a Dockerized self-hosted infrastructure for securely serving a WordPress website with NGINX, MariaDB, and optional additional services like Redis, FTP, and Adminer.
+
+**Disclaimer:** As a school project that needs to be evaluated on a school machine (without a public IP and without sudo rights), the subject imposes some limitations:
+
+1. The WordPress website needs to be served to localhost by redirecting the required website domain `<login>.42.fr` to localhost through tweaking the `/etc/hosts` file.
+2. Since we don't have sudo rights on the Ubuntu machine where the evaluation will take place, development must occur on a virtual machine (VM).
+3. Therefore, the SSL/TLS certificates will be self-signed.
+
+The code in this repository is designed for three environments:
+
+1. **Evaluation environment** – respecting the subject’s limitations, serving a WordPress website as `<login>.42.fr` (to localhost) with self-signed certificates.
+2. **Cloud environment** – an Ubuntu virtual machine (DigitalOcean droplet) with a public IP address, serving a WordPress website on the real domain `slombard.xyz` with real SSL/TLS certificates.
+3. **Local development environment** – a MacOS machine serving `slombard.xyz` with self-signed certificates.
+
+The local and cloud environments are connected through a GitHub Actions pipeline, while the evaluation environment is independent. There are three scripts to set up the different environments and modify relevant variables in the .env file.
 
 ## Digital Ocean VM and Local Development
 
@@ -197,8 +223,6 @@ This command removes all unused images. If you want to remove a specific image, 
 ```bash
 docker rmi <image-id>
 ```
-
-# Inception
 
 ## Docker Overview
 
