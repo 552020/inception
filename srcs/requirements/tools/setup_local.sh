@@ -1,17 +1,25 @@
 #!/bin/bash
 
 # Define the root of the project as three directories up from the current directory
-ROOT=../../../
+# ROOT=../../..
+# Determine the absolute path of the project root (three directories up from the script's location)
+ROOT=$(cd "$(dirname "$0")/../../.." && pwd)
 
 
 # Define the secrets directory relative to the project root
 SECRETS_DIR="${ROOT}/secrets"
+echo $SECRETS_DIR
+ls $SECRETS_DIR
+
 
 # Define the path to the .env file
 ENV_FILE="${ROOT}/.env"
 
-# Define the path for SSL certificates
+# Define the path for SSL certificates for myricae.xyz
 MYRICAE_CERT_DIR="${ROOT}/srcs/certbot-etc/live/myricae.xyz"
+
+#Define the parh for SSL certicates for slombad.xyz
+SLOMBARDXYZ_CERT_DIR="${ROOT}/srcs/certbot-etc/live/slombard.xyz"
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null
@@ -31,7 +39,6 @@ else
     echo "Docker Compose is available."
 fi
 
-# Check if the password files exist in the local secrets folder
 # Check if the password files exist in the local secrets folder
 if [ ! -f "${SECRETS_DIR}/mysql_root_password.txt" ] || \
    [ ! -f "${SECRETS_DIR}/mysql_user_password.txt" ] || \
@@ -57,6 +64,31 @@ if [ ! -f "$MYRICAE_CERT_DIR/fullchain.pem" ] || [ ! -f "$MYRICAE_CERT_DIR/privk
     echo "Self-signed certificates for myricae.xyz generated successfully."
 else
     echo "Self-signed certificates for myricae.xyz already exist."
+fi
+
+# Generate self-signed SSL certificates for slombard.xyz if they do not already exist
+if [ ! -f "$SLOMBARDXYZ_CERT_DIR/fullchain.pem" ] || [ ! -f "$SLOMBARDXYZ_CERT_DIR/privkey.pem" ]; then
+    echo "Self-signed certificates for slombard.xyz not found. Generating..."
+
+    mkdir -p $SLOMBARDXYZ_CERT_DIR
+
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout "$SLOMBARDXYZ_CERT_DIR/privkey.pem" \
+        -out "$SLOMBARDXYZ_CERT_DIR/fullchain.pem" \
+        -subj "/C=DE/ST=Berlin/L=Berlin/O=42/OU=42/CN=slombard.xyz"
+
+    echo "Self-signed certificates for slombard.xyz generated successfully."
+else
+    echo "Self-signed certificates for slombard.xyz already exist."
+fi
+
+# Check if slombard.xyz is already mapped to localhost in /etc/hosts
+if ! grep -q "slombard.xyz" /etc/hosts; then
+    echo "Adding slombard.xyz to /etc/hosts..."
+    sudo sh -c 'echo "127.0.0.1 slombard.xyz" >> /etc/hosts'
+    echo "slombard.xyz has been added to /etc/hosts."
+else
+    echo "slombard.xyz is already in /etc/hosts."
 fi
 
 # Get the current username

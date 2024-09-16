@@ -6,6 +6,7 @@ RUN apk add --no-cache nginx openssl certbot certbot-nginx \
     && adduser -D -H -s /bin/false -u 1000 -G www-data www-data
 
 # Create SSL directory and generate a self-signed certificate for slombard.42.fr
+# This is not needed in the local and droplet environments, but we will leave it here for now
 RUN mkdir -p /etc/nginx/ssl \
     && openssl req -x509 -nodes -days 365 \
        -newkey rsa:2048 \
@@ -17,6 +18,12 @@ RUN mkdir -p /etc/nginx/ssl \
        -keyout /etc/nginx/ssl/localhost.key \
        -out /etc/nginx/ssl/localhost.crt \
        -subj "/C=DE/ST=Berlin/L=Berlin/O=42/OU=42/CN=localhost"
+
+# Add a build argument for NGINX_CONF_FILE
+ARG NGINX_CONF_FILE
+
+# Echo the value of NGINX_CONF_FILE for debugging
+RUN echo "NGINX_CONF_FILE is set to: ${NGINX_CONF_FILE}"
 
 # Copy custom NGINX configuration file into the container
 COPY ./conf/${NGINX_CONF_FILE} /etc/nginx/nginx.conf

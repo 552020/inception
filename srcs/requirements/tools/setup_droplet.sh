@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Define the root of the project as three directories up from the current directory
-ROOT=../../../
+# ROOT=../../..
+# Determine the absolute path of the project root (three directories up from the script's location)
+ROOT=$(cd "$(dirname "$0")/../../.." && pwd)
 
 # Define the path to the .env file
 ENV_FILE="${ROOT}/.env"

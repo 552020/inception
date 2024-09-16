@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Define the root of the project as three directories up from the current directory
-ROOT=../../../
+# ROOT=../../..
+# Determine the absolute path of the project root (three directories up from the script's location)
+ROOT=$(cd "$(dirname "$0")/../../.." && pwd)
 
 # Define the path to the .env file
 ENV_FILE="${ROOT}/.env"
@@ -40,5 +42,13 @@ mkdir -p "${INCEPTION_DATA_PATH}"
 if ! grep -q "INCEPTION_DATA_PATH" "${ENV_FILE}"; then
     echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> "${ENV_FILE}"
 fi
+
+# Set DOMAIN_NAME to slombard.42.fr in the .env file
+if grep -q "DOMAIN_NAME" "${ENV_FILE}"; then
+    sed -i '' 's/DOMAIN_NAME=.*/DOMAIN_NAME=slombard.42.fr/' "${ENV_FILE}"
+else
+    echo "DOMAIN_NAME=slombard.42.fr" >> "${ENV_FILE}"
+fi
+
 
 echo "Droplet setup complete with INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}"
