@@ -165,4 +165,6 @@ This project consists in setting up a small infrastructure composed of different
 
 - [] Move setup scripts to srcs/tools
 
-  - [] Understand the debate about the `.env` file: https://42born2code.slack.com/archives/C04C5N7EWS2/p1709318094589039
+- [] Understand the debate about the `.env` file: https://42born2code.slack.com/archives/C04C5N7EWS2/p1709318094589039
+
+- [ ] Add rsync to sync the development and the droplet environemnt https://en.wikipedia.org/wiki/Rsync
