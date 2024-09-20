@@ -27,9 +27,7 @@ RUN echo "NGINX_CONF_FILE is set to: ${NGINX_CONF_FILE}"
 
 # Copy custom NGINX configuration file into the container
 COPY ./conf/${NGINX_CONF_FILE} /etc/nginx/nginx.conf
-# Copy self-signed certificates for myricae.xyz into the container
-COPY ./srcs/ssl/myricae.xyz/fullchain.pem /etc/nginx/ssl/myricae.xyz.crt
-COPY ./srcs/ssl/myricae.xyz/privkey.pem /etc/nginx/ssl/myricae.xyz.key
+
 
 
 # Create the necessary directories for NGINX and WordPress
