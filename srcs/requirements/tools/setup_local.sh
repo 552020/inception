@@ -39,6 +39,16 @@ else
     echo "Docker Compose is available."
 fi
 
+# Check if the current user is part of the docker group
+current_user=$(whoami)
+if groups "$current_user" | grep -q "\bdocker\b"; then
+    echo "User '$current_user' is part of the docker group."
+else
+    echo "User '$current_user' is NOT part of the docker group. Please add the user to the docker group and log out/log in again:"
+    echo "sudo usermod -aG docker $current_user"
+    exit 1
+fi
+
 # Check if the password files exist in the local secrets folder
 if [ ! -f "${SECRETS_DIR}/mysql_root_password.txt" ] || \
    [ ! -f "${SECRETS_DIR}/mysql_user_password.txt" ] || \
