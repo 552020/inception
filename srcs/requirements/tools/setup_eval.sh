@@ -45,7 +45,7 @@ fi
 
 # Set DOMAIN_NAME to slombard.42.fr in the .env file
 if grep -q "DOMAIN_NAME" "${ENV_FILE}"; then
-    sed -i '' 's/DOMAIN_NAME=.*/DOMAIN_NAME=slombard.42.fr/' "${ENV_FILE}"
+    sed -i 's/DOMAIN_NAME=.*/DOMAIN_NAME=slombard.42.fr/' "${ENV_FILE}"
 else
     echo "DOMAIN_NAME=slombard.42.fr" >> "${ENV_FILE}"
 fi
