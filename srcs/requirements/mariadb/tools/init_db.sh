@@ -1,17 +1,7 @@
 #!/bin/bash
 
 # Retrieve the passwords from Docker secrets
-MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
-. /run/secrets/mysql_user_password
-MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
-
-# Debug: Print current users
-# echo "Current users in the system:"
-# cat /etc/passwd || echo "/etc/passwd file not found"
-
-
-
-# Retrieve the passwords from Docker secrets
+# -f: Tests if a file exists and is a regular file (not a directory or device file)
 if [[ -f /run/secrets/mysql_root_password ]]; then
     MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
     echo "Successfully retrieved MySQL root password from secrets."
@@ -29,6 +19,7 @@ else
 fi
 
 # Check if necessary environment variables are set
+# -z: Tests if a string is empty (has zero length)
 if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ]; then
     echo "Error: MYSQL_DATABASE or MYSQL_USER environment variables are not set."
     exit 1
@@ -56,23 +47,18 @@ fi
 # Set the path to the MariaDB data directory
 DATA_DIR="/var/lib/mysql"
 
-# Check if the MariaDB data directory is already initialized
 if [ -d "$DATA_DIR/mysql" ]; then
     echo "MariaDB data directory already exists. Skipping initialization."
 else
     echo "MariaDB data directory not found. Initializing..."
-    
     # Initialize the MariaDB database
     mysql_install_db --user=mysql --datadir="$DATA_DIR" || { echo "Error: Failed to initialize MariaDB data directory."; exit 1; }
 fi
-
-
 
 # Start MySQL/MariaDB service
 echo "Starting MariaDB service..."
 mysqld_safe &
 sleep 5  # Give MariaDB some time to start
-
 
 echo "Waiting for MariaDB to be fully ready..."
 timeout=180  # Max wait time
@@ -102,22 +88,6 @@ while true; do
         exit 1
     fi
 done
-
-
-# # Create database if it doesn't exist
-# mysql -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
-
-# # Create user if it doesn't exist
-# mysql -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_USER_PASSWORD}';"
-
-# # Grant all privileges to the user for the database
-# mysql -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%';"
-
-# # Change the root password for localhost
-# mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-
-# # Flush privileges to apply changes
-# mysql -e "FLUSH PRIVILEGES;"
 
 # Create a temporary SQL file for setup
 SQL_FILE="/tmp/init.sql"
