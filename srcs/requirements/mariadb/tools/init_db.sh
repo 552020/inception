@@ -2,6 +2,7 @@
 
 # Retrieve the passwords from Docker secrets
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
+. /run/secrets/mysql_user_password
 MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
 
 # Debug: Print current users

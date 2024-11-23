@@ -168,3 +168,15 @@ This project consists in setting up a small infrastructure composed of different
 - [] Understand the debate about the `.env` file: https://42born2code.slack.com/archives/C04C5N7EWS2/p1709318094589039
 
 - [ ] Add rsync to sync the development and the droplet environemnt https://en.wikipedia.org/wiki/Rsync
+
+- [ ] Ask Dilshod again about his trick regarding secrets
+
+- [ ] Understand difference between ARG, ENV and the .env file in Docker and Docker compose
+
+  - https://vsupalov.com/docker-arg-env-variable-guide/
+  - https://stackoverflow.com/questions/41916386/arg-or-env-which-one-to-use-in-this-case
+  - https://docs.docker.com/reference/dockerfile/
+
+- [ ] Go fast through the Udmey course: https://www.udemy.com/course/docker-mastery/?couponCode=ST11MT91624B
+
+- [ ] Go fast through the docs
