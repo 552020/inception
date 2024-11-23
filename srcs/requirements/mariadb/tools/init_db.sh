@@ -6,8 +6,8 @@ MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
 MYSQL_USER_PASSWORD=$(cat /run/secrets/mysql_user_password)
 
 # Debug: Print current users
-echo "Current users in the system:"
-cat /etc/passwd || echo "/etc/passwd file not found"
+# echo "Current users in the system:"
+# cat /etc/passwd || echo "/etc/passwd file not found"
 
 
 
@@ -27,7 +27,6 @@ else
     echo "Error: MySQL user password secret file not found!"
     exit 1
 fi
-
 
 # Check if necessary environment variables are set
 if [ -z "$MYSQL_DATABASE" ] || [ -z "$MYSQL_USER" ]; then
@@ -53,7 +52,6 @@ else
     echo "Error: Group 'mysql' does not exist. Exiting."
     exit 1
 fi
-
 
 # Set the path to the MariaDB data directory
 DATA_DIR="/var/lib/mysql"
