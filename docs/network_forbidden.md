@@ -206,3 +206,5 @@ networks:
 - **Modern Networking Approach:** Define isolated networks in your Docker Compose file using `networks:`, which allows containers to communicate securely and with service discovery via DNS. This method is much more flexible, secure, and scalable compared to `host` networking or `links:`.
 
 By adopting Docker's modern networking model, you can ensure that your services are better isolated and more resilient, while also adhering to best practices for containerized applications.
+
+A
