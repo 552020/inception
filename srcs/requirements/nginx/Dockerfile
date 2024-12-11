@@ -26,7 +26,7 @@ ARG NGINX_CONF_FILE
 RUN echo "NGINX_CONF_FILE is set to: ${NGINX_CONF_FILE}"
 
 # Copy custom NGINX configuration file into the container
-COPY ./conf/${NGINX_CONF_FILE} /etc/nginx/nginx.conf
+COPY ./conf/eval.conf /etc/nginx/nginx.conf
 
 
 

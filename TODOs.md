@@ -58,7 +58,7 @@ Here’s the formatted content as Markdown with checkboxes:
 
 - [x] For the entire evaluation process, if you don't know how to check a requirement or verify anything, the evaluated student has to help you.
 
-- [ ] Ensure that all the files required to configure the application are located inside a `srcs` folder. The `srcs` folder must be located at the root of the repository.
+- [x] Ensure that all the files required to configure the application are located inside a `srcs` folder. The `srcs` folder must be located at the root of the repository.
 
 - [x] Ensure that a `Makefile` is located at the root of the repository.
 
