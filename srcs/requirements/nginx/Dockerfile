@@ -1,5 +1,5 @@
 # Use the penultimate stable version of Alpine as the base image
-FROM alpine:3.19
+FROM alpine:3.20
 
 # Install NGINX, OpenSSL, and Certbot for managing SSL certificates
 RUN apk add --no-cache nginx openssl certbot certbot-nginx \

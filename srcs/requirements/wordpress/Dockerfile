@@ -52,7 +52,7 @@
 # ENTRYPOINT ["/usr/local/bin/wordpress_setup.sh"]
 
 # Use Alpine Linux as the base image
-FROM alpine:3.19
+FROM alpine:3.20
 
 # Install necessary packages: PHP, PHP-FPM, WP-CLI, Redis, MariaDB client, and other dependencies
 RUN echo "Installing required packages..." \
