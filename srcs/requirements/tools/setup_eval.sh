@@ -73,23 +73,6 @@ else
     echo "Password files found in ${SECRETS_DIR}. Continuing setup..."
 fi
 
-# Generate self-signed SSL certificates for myricae.xyz if they do not already exist
-if [ ! -f "$MYRICAE_CERT_DIR/fullchain.pem" ] || [ ! -f "$MYRICAE_CERT_DIR/privkey.pem" ]; then
-    echo "Self-signed certificates for myricae.xyz not found. Generating..."
-
-    mkdir -p $MYRICAE_CERT_DIR
-
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-        -keyout "$MYRICAE_CERT_DIR/privkey.pem" \
-        -out "$MYRICAE_CERT_DIR/fullchain.pem" \
-        -subj "/C=DE/ST=Berlin/L=Berlin/O=42/OU=42/CN=myricae.xyz"
-
-    echo "Self-signed certificates for myricae.xyz generated successfully."
-else
-    echo "Self-signed certificates for myricae.xyz already exist."
-fi
-
-
 # Generate self-signed SSL certificates for slombard.xyz if they do not already exist
 if [ ! -f "$SLOMBARDXYZ_CERT_DIR/fullchain.pem" ] || [ ! -f "$SLOMBARDXYZ_CERT_DIR/privkey.pem" ]; then
     echo "Self-signed certificates for slombard.xyz not found. Generating..."
