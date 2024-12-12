@@ -99,8 +99,9 @@ else
 fi
 
 # Create the directory if it doesn't exist
-#export INCEPTION_DATA_PATH="/home/${current_user}/data"
-
+export INCEPTION_DATA_PATH="/home/${current_user}/data"
+mkdir -p "${INCEPTION_DATA_PATH}/wordpress"
+mkdir -p "${INCEPTION_DATA_PATH}/mysql"
 
 # Create the directory if it doesn't exist
 #mkdir -p "${INCEPTION_DATA_PATH}"
