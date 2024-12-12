@@ -35,7 +35,7 @@ RUN echo "Setting up www-data user and group..." \
 VOLUME ["/var/www/wordpress"]
 
 # Copy custom PHP-FPM configuration
-COPY ./conf/www.conf /etc/php81/php-fpm.d/www.conf
+COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
 
 # Download and extract WordPress
 RUN echo "Downloading and extracting WordPress..." \
