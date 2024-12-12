@@ -26,8 +26,7 @@ machine.
 folder.
 • A _Makefile_ is also required and must be located at the root of your directory. It must set up your entire application (i.e., it has to build the Docker images using
 docker-compose.yml).
-• This subject requires putting into practice concepts that, depending on your background, you may not have learned yet. Therefore, we advise you not to hesitate to
-read a lot of documentation related to Docker usage, as well as anything else you will find helpful in order to complete this assignment.
+• This subject requires putting into practice concepts that, depending on your background, you may not have learned yet. Therefore, we advise you not to hesitate to read a lot of documentation related to Docker usage, as well as anything else you will find helpful in order to complete this assignment.
 
 ## Chapter IV
 
