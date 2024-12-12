@@ -13,8 +13,7 @@ services:
       # - "80:80"
       - "443:443"
     volumes:
-      - ${INCEPTION_DATA_PATH}/wordpress:/var/www/wordpress
-      - ./certbot-etc:/etc/letsencrypt
+      - wordpress_files:/var/www/wordpress
     networks:
       - inception
     restart: unless-stopped
@@ -26,7 +25,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - ${INCEPTION_DATA_PATH}/mysql:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -48,7 +47,7 @@ services:
     env_file:
       - ../.env
     volumes:
-      - ${INCEPTION_DATA_PATH}/wordpress:/var/www/wordpress
+      - wordpress_files:/var/www/wordpress
     secrets:
       - mysql_root_password
       - mysql_user_password
@@ -84,3 +83,17 @@ secrets:
     file: ../secrets/wp_admin_password.txt
   wp_user_password:
     file: ../secrets/wp_user_password.txt
+
+volumes:
+  wordpress_files:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/slombard/data/wordpress
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/slombard/data/mysql
