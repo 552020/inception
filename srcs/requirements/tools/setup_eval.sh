@@ -116,16 +116,16 @@ else
 fi
 
 # Create the directory if it doesn't exist
-export INCEPTION_DATA_PATH="/home/${current_user}/data"
+#export INCEPTION_DATA_PATH="/home/${current_user}/data"
 
 
 # Create the directory if it doesn't exist
-mkdir -p "${INCEPTION_DATA_PATH}"
+#mkdir -p "${INCEPTION_DATA_PATH}"
 
 # Ensure only one instance of INCEPTION_DATA_PATH is written to .env
-if ! grep -q "INCEPTION_DATA_PATH" "${ENV_FILE}"; then
-    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> "${ENV_FILE}"
-fi
+#if ! grep -q "INCEPTION_DATA_PATH" "${ENV_FILE}"; then
+#    echo "INCEPTION_DATA_PATH=${INCEPTION_DATA_PATH}" >> "${ENV_FILE}"
+#fi
 
 # Set DOMAIN_NAME to slombard.42.fr in the .env file
 if grep -q "DOMAIN_NAME" "${ENV_FILE}"; then

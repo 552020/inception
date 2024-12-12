@@ -62,7 +62,7 @@ Here’s the formatted content as Markdown with checkboxes:
 
 - [x] Ensure that a `Makefile` is located at the root of the repository.
 
-- [ ] Before starting the evaluation, run this command in the terminal:
+- [x] Before starting the evaluation, run this command in the terminal:
 
   ```bash
   docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
