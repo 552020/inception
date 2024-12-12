@@ -5,18 +5,18 @@ FROM alpine:3.20
 RUN echo "Installing required packages..." \
     && apk update \
     && apk add --no-cache \
-    php81 php81-fpm php81-mysqli php81-json php81-opcache \
-    php81-curl php81-dom php81-exif php81-fileinfo \
-    php81-mbstring php81-session php81-xml php81-zip \
-    php81-redis php81-phar \
+    php83 php83-fpm php83-mysqli php83-json php83-opcache \
+    php83-curl php83-dom php83-exif php83-fileinfo \
+    php83-mbstring php83-session php83-xml php83-zip \
+    php83-redis php83-phar \
     mariadb-client \
     curl bash \
     && echo "Package installation complete."
 
 # Create a symlink from php81 to php to ensure WP-CLI works
-RUN echo "Creating PHP symlink..." \
-    && ln -s /usr/bin/php81 /usr/bin/php \
-    && echo "Symlink created."
+#RUN echo "Creating PHP symlink..." \
+#&& ln -s /usr/bin/php81 /usr/bin/php \
+#&& echo "Symlink created."
 
 # Install WP-CLI for WordPress management
 RUN echo "Downloading WP-CLI..." \

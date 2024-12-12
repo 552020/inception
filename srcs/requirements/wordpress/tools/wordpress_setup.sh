@@ -111,7 +111,7 @@ fi
 
 # Start PHP-FPM to keep the container running
 echo "Starting PHP-FPM..."
-php-fpm81 -F &
+php-fpm83 -F &
 sleep 5  # Give PHP-FPM some time to start
 
 # Loop to check if PHP-FPM is running
